@@ -15,6 +15,7 @@ This app aims to make it easy to handle your work projects. It allows the user t
 - view statistics for different time ranges (matplotlib?)
 - maybe export saved times in csv or some other format
 - create tasks for stuff done often, for example "small task" that always saves 30 minutes done
+- start phonecall task, and specify client etc after the call has ended
 
 ## Implementation
 
@@ -23,8 +24,8 @@ This app aims to make it easy to handle your work projects. It allows the user t
 At least these database tables will be used
 - users(id, username, passwd) maybe admin column
 - clients(id, name) maybe more columns later
-- projects(id, user_id, name)
-- entries(id, project_id, duration, timestamp, comment)
+- projects(id, status, comment, user_id, client_id)
+- entries(id, project_id, starttime, endtime, comment)
 
 ### Code
 - data is always in database, and accessed when needed
