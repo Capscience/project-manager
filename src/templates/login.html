@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% set title = "Login" %}
+{% block content %}
+
+<form action="{{ url_for('manageuser', username=username) }}" method="post">
+    <div class="form-floating mb-3">
+        <input type="username" class="form-control" id="username" placeholder="username" minlength="3" required autofocus>
+        <label for="username">Username</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="password" placeholder="password" minlength="10" required>
+        <label for="password">Password</label>
+    </div>
+    <div class="col-md">
+        <button class="btn btn-primary" type="submit" value="">Log In</button>
+        <button class="btn btn-outline-primary" type="button" value="password">Register</button>
+    </div>
+</form>
+{% endblock %}
