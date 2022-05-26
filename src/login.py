@@ -50,7 +50,7 @@ def login():
     """Log in to the app."""
 
     if g.user:
-        return redirect(url_for('/'))
+        return redirect(url_for('home'))
     
     # Create new login
     invalidate_login()
@@ -86,14 +86,16 @@ def register():
         # Repeated password not matching
         if password != repeat_pw:
             flash('Please enter matching passwords!')
-            return
+            return render_template('register.html')
         # User already exists
         if name == sql.Users.query.filter_by(name = name).one_or_none():
             flash('Username already exists.')
-            return
+            return render_template('register.html')
         # Successful creation of new user
         password = hash_passwd(password)
+        print(password)
         db.session.add(sql.Users(name = name, password = password))
+        db.session.commit()
         flash(f'User {name} has been successfully created.')
         return redirect(url_for('login'))
     return render_template('register.html')
@@ -109,4 +111,4 @@ def logout():
     """Log out from the app."""
 
     invalidate_login()
-    return url_for('home')
+    return redirect(url_for('home'))

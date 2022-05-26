@@ -7,16 +7,16 @@
 
 <form method="post">
     <div class="form-floating mb-3">
-        <input type="username" class="form-control" id="username" placeholder="username" minlength="3" required autofocus>
+        <input type="username" class="form-control" id="username" name="username" placeholder="username" minlength="3" autofocus>
         <label for="username">Username</label>
     </div>
     <div class="form-floating mb-3">
-        <input type="password" class="form-control" id="password" placeholder="password" minlength="10" required>
+        <input type="password" class="form-control" id="password" name="password" placeholder="password" minlength="8">
         <label for="password">Password</label>
     </div>
     <div class="col-md">
         <button class="btn btn-primary" type="submit" value="">Log In</button>
-        <button class="btn btn-outline-primary" type="button" href="/register">Register</button>
+        <a href="/register" class="btn btn-outline-primary" type="link">Register</button></a>
     </div>
 </form>
 {% endblock %}

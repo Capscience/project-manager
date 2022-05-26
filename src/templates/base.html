@@ -20,8 +20,12 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <div class="navbar-nav">
                         <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-                        <a class="nav-link" href="#">Help</a>
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        <a class="nav-link" href="{{ url_for('help') }}">Help</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">User</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('login') }}">Login</a>
+                            <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                        </ul>
                     </div>
                 </div>
             </div>
