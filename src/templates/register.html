@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set title = "Login" %}
+{% set title = "Create new user" %}
 
 {% block messages %}{% endblock %}
 
@@ -14,9 +14,12 @@
         <input type="password" class="form-control" id="password" placeholder="password" minlength="10" required>
         <label for="password">Password</label>
     </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="repeat_pw" placeholder="repeatpassword" minlength="10" required>
+        <label for="password">Repeat password</label>
+    </div>
     <div class="col-md">
-        <button class="btn btn-primary" type="submit" value="">Log In</button>
-        <button class="btn btn-outline-primary" type="button" href="/register">Register</button>
+        <button class="btn btn-primary" type="submit" value="">Register</button>
     </div>
 </form>
 {% endblock %}
