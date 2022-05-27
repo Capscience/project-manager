@@ -25,6 +25,7 @@ except:
     print('Secret key or database url not found')
 
 db = SQLAlchemy(app)
+db.create_all()
 
 # Import files including pages after app is created
 import login
