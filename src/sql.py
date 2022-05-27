@@ -3,7 +3,8 @@ from src.app import db
 class Users(db.Model):
     """Login data for users."""
 
-    name = db.Column(db.String(32), primary_key = True)
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    name = db.Column(db.String(32))
     password = db.Column(db.String(128))
 
 
