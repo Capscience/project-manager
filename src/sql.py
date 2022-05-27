@@ -5,3 +5,5 @@ class Users(db.Model):
 
     name = db.Column(db.String(32), primary_key = True)
     password = db.Column(db.String(128))
+
+db.create_all()
