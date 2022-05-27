@@ -32,7 +32,7 @@ class Projects(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     state = db.Column(db.Integer)
     name = db.Column(db.String(128))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id',
+    user_id = db.Column(db.Integer, db.ForeignKey('users.uid',
                                                   ondelete = 'CASCADE'))
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id',
                                                      ondelete = 'CASCADE'))
