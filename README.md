@@ -8,7 +8,7 @@ App can be tested on [Heroku](https://tsoha-project-manager.herokuapp.com)
 
 ## Development progress
 
-So far project-manager only has log in and new user registering implemented, and placeholder pages made. Database tables planned below have been created for proper functionality implementation.
+So far project-manager only has log in and new user registering implemented (due to spending hours debugging heroku psql), and placeholder pages made. Database tables planned below have been created for proper functionality implementation.
 
 Next step will be creating the main functionality of the program, and UI for that.
 
