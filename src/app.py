@@ -1,5 +1,6 @@
 """Project manager"""
 
+from os import getenv
 from flask import Flask
 from flask import render_template
 from flask import g
@@ -11,7 +12,18 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Config file example in GitHub
-app.config.from_pyfile('manager.conf')
+try:
+    app.config.from_pyfile('manager.conf')
+except FileNotFoundError:
+    pass
+try:
+    database_url = getenv("DATABASE_URL")
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    print(getenv('SECRET_KEY'))
+    app.secret_key = getenv("SECRET_KEY")
+except:
+    print('Secret key or database url not found')
+
 db = SQLAlchemy(app)
 
 # Import files including pages after app is created
