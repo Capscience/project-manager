@@ -28,8 +28,8 @@ db = SQLAlchemy(app)
 db.create_all()
 
 # Import files including pages after app is created
-import login
-import user
+import src.login
+import src.user
 
 @app.route('/')
 def home():

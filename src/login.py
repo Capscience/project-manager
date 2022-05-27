@@ -10,8 +10,8 @@ from flask import request
 from flask import url_for
 from flask import flash
 from passlib.hash import sha512_crypt
-from app import app, db
-import sql
+from src.app import app, db
+from src import sql
 
 def require_login():
     """Check that user is logged in when accessing app."""

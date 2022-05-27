@@ -2,7 +2,7 @@ from flask import render_template
 from flask import g
 from flask import redirect
 from flask import url_for
-from app import app
+from src.app import app
 
 @app.route('/<usr>')
 def user(usr):
