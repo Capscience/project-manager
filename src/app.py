@@ -18,6 +18,8 @@ except FileNotFoundError:
     pass
 try:
     database_url = getenv("DATABASE_URL")
+    if database_url.startswith('postgres:'):
+        database_url.replace('postgres:', 'postgresql+psycopg2:')
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     print(getenv('SECRET_KEY'))
     app.secret_key = getenv("SECRET_KEY")
