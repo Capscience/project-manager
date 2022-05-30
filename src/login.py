@@ -94,7 +94,6 @@ def register():
             return render_template('register.html')
         # Successful creation of new user
         password = hash_passwd(password)
-        print(password)
         db.session.add(sql.Account(name = name, password = password))
         db.session.commit()
         flash(f'User {name} has been successfully created.')
