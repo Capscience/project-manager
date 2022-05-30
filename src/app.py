@@ -15,15 +15,15 @@ app = Flask(__name__)
 try:
     app.config.from_pyfile('manager.conf')
 except FileNotFoundError:
-    pass
-try:
-    database_url = getenv("DATABASE_URL").replace('postgres', 'postgresql+psycopg2')
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-    print(getenv('SECRET_KEY'))
-    app.secret_key = getenv("SECRET_KEY")
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-except:
-    print('Secret key or database url not found')
+    # Secondary method is using environment variables
+    try:
+        database_url = getenv("DATABASE_URL").replace('postgres', 'postgresql+psycopg2')
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+        print(getenv('SECRET_KEY'))
+        app.secret_key = getenv("SECRET_KEY")
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    except:
+        print('Secret key or database url not found')
 
 db = SQLAlchemy(app)
 
