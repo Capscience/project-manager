@@ -6,6 +6,13 @@
 {% block content %}
 
 <form method="post">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
     <div class="form-floating mb-3">
         <input type="username" class="form-control" id="username" name="username" placeholder="username" minlength="3" required autofocus>
         <label for="username">Username</label>

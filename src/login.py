@@ -50,6 +50,8 @@ def login():
     """Log in to the app."""
 
     if g.user:
+        flash(f'You are already logged in as {g.user}. \
+              Please log out before logging in on another user.')
         return redirect(url_for('home'))
     
     # Create new login
@@ -60,7 +62,8 @@ def login():
         user = sql.Account.query.filter_by(name = name).one_or_none()
         # If user doesn't exist, redirect to register page
         if not user:
-            return redirect(url_for('register'))
+            flash('Invalid username or password.')
+            return redirect(url_for('login'))
         # If login succesful, set session user
         if validate_passwd(user, password):
             session['user'] = user.name
