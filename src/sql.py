@@ -1,6 +1,6 @@
 from src.app import db
 
-class User(db.Model):
+class Account(db.Model):
     """Login data for users."""
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
@@ -32,7 +32,7 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     state = db.Column(db.Integer)
     name = db.Column(db.String(128))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id',
+    user_id = db.Column(db.Integer, db.ForeignKey('account.id',
                                                   ondelete = 'CASCADE'))
     company_id = db.Column(db.Integer, db.ForeignKey('company.id',
                                                      ondelete = 'CASCADE'))
