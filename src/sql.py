@@ -1,41 +1,42 @@
 from src.app import db
 
-class Users(db.Model):
+class User(db.Model):
     """Login data for users."""
 
-    uid = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     name = db.Column(db.String(32))
     password = db.Column(db.String(128))
 
 
-class Companies(db.Model):
+class Company(db.Model):
     """Companies that can be used as clients for projects."""
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     name = db.Column(db.String(32), unique = True)
 
 
-class Entries(db.Model):
+class Entry(db.Model):
     """Project time entries."""
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    project_id = db.Column(db.Integer, db.ForeignKey('projects.id',
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id',
                                                      ondelete = 'CASCADE'))
     start = db.Column(db.DateTime)
     end = db.Column(db.DateTime)
     comment = db.Column(db.String(128))
 
 
-class Projects(db.Model):
+class Project(db.Model):
     """Project data for users."""
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     state = db.Column(db.Integer)
     name = db.Column(db.String(128))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.uid',
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id',
                                                   ondelete = 'CASCADE'))
-    company_id = db.Column(db.Integer, db.ForeignKey('companies.id',
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id',
                                                      ondelete = 'CASCADE'))
 
 
+# Create all tables that don't exist yet
 db.create_all()
