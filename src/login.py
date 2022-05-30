@@ -57,7 +57,7 @@ def login():
     name = request.values.get('username')
     password = request.values.get('password')
     if name and password:
-        user = sql.Users.query.filter_by(name = name).one_or_none()
+        user = sql.User.query.filter_by(name = name).one_or_none()
         # If user doesn't exist, redirect to register page
         if not user:
             return redirect(url_for('register'))
@@ -88,13 +88,14 @@ def register():
             flash('Please enter matching passwords!')
             return render_template('register.html')
         # User already exists
-        if name == sql.Users.query.filter_by(name = name).one_or_none():
+        user = sql.User.query.filter_by(name = name).one_or_none()
+        if user:
             flash('Username already exists.')
             return render_template('register.html')
         # Successful creation of new user
         password = hash_passwd(password)
         print(password)
-        db.session.add(sql.Users(name = name, password = password))
+        db.session.add(sql.User(name = name, password = password))
         db.session.commit()
         flash(f'User {name} has been successfully created.')
         return redirect(url_for('login'))
