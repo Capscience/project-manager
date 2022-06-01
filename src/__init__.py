@@ -28,8 +28,8 @@ except FileNotFoundError:
 db = SQLAlchemy(app)
 
 # Import files including pages after app is created
-import src.login
-import src.user
+from src import login
+from src import user
 
 @app.route('/')
 def home():
@@ -40,7 +40,3 @@ def home():
 @app.route('/help')
 def help():
     return render_template('help.html')
-
-
-if __name__ == '__main__':
-    app.run()

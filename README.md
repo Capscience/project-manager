@@ -1,44 +1,45 @@
 # Project manager
 
-A Flask app for managing and timing your projects. The project is for University of Helsinki course Tietokantasovellus.
+A Flask app for easily saving workhours. The project is for University of Helsinki course Tietokantasovellus.
 
 This app aims to make it easy to handle your work projects. It allows the user to use a stopwatch for saving workhours, comments for each session, choosing clients for projects etc.
 
-App can be tested on [Heroku](https://tsoha-project-manager.herokuapp.com)
+A work-in-progress version can be tested in [Heroku](https://tsoha-project-manager.herokuapp.com)
 
 ## Development progress
-
-So far project-manager only has log in and new user registering implemented (due to spending hours debugging heroku psql), and placeholder pages made. Database tables planned below have been created for proper functionality implementation.
-
-Next step will be creating the main functionality of the program, and UI for that.
 
 ### Login and register
 
 Login system is mostly made without using packages like flask-login etc. Passwords are hashed using salted sha512 hashing algorithm. Login and new user registration system works fine, but probably will need some tweaks especially on the UI side.
 
-## Features
+### Main functionality
 
-- login to use app (maybe organizations and admin users)
+Main app GUI aims to be easy to use, especially requiring as few clicks as possible to do basic things.
+
+## Planned features
+
+- login to use app
 - create and delete your projects
-- stopwatch type timing for projects, times are saved
+- time project using start/pause/stop, stop rounds time according to worktype
 - stopwatch can be edited when ending session, if timer has been forgotten on or off
-- create and delete clients and assing projects to them
 - add comments after working sessions
+- finished (stopped) projects are not shown in default view, but can shown separately
+- create and delete client companies and assing projects to them
 - view statistics for different time ranges (matplotlib?)
 - maybe export saved times in csv or some other format
-- create tasks for stuff done often, for example "small task" that always saves 30 minutes done
-- start phonecall task, and specify client etc after the call has ended
+- manually created worktypes to determine billing data (created by developer manually using sql)
+- cancel started session (and project if empty)
+- pause all projects easily using a single button in case of phonecalls or other interruptions
+- restart project after saving it (creates new project with same functionality)
+- when creating a project allow user to create it, create and start it, or create and stop, which automatically saves an entry with minimum time for that worktype
 
 ## Implementation
 
 ### Tables
 
 At least these database tables will be used
-- users(id, username, passwd) maybe admin column
+- users(id, username, passwd)
 - clients(id, name) maybe more columns later
-- projects(id, status, comment, user_id, client_id)
+- projects(id, status, comment, user_id, company_id, type_id)
 - entries(id, project_id, starttime, endtime, comment)
-
-### Code
-- data is always in database, and accessed when needed
-- main functionality in a service file
+- worktype(id, name, rounding, minimum, price)

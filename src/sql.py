@@ -1,4 +1,4 @@
-from src.app import db
+from src import db
 
 class Account(db.Model):
     """Login data for users."""
@@ -36,7 +36,17 @@ class Project(db.Model):
                                                   ondelete = 'CASCADE'))
     company_id = db.Column(db.Integer, db.ForeignKey('company.id',
                                                      ondelete = 'CASCADE'))
+    type_id = db.Column(db.Integer, db.ForeignKey('worktype.id'))
 
+
+class WorkType(db.Model):
+    """Templates for rounding and pricing different jobs."""
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    name = db.Column(db.String(32), unique = True)
+    rounding = db.Column(db.Numeric)    # rounding parameter for hours
+    minimum = db.Column(db.Numeric) # minumim hours
+    price = db.Column(db.Numeric)   # price per hour
 
 # Create all tables that don't exist yet
 db.create_all()
