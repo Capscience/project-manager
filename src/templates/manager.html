@@ -39,31 +39,32 @@
                     <option value="3">Type 3</option>
                 </select>
                 <select class="form-select mb-3" aria-label="Select client">
-                    <option selected value="0">None</option>
-                    <option value="1">Company 1</option>
-                    <option value="2">Company 2</option>
-                    <option value="3">Company 3</option>
+                    <option selected value="0">--select company--</option>
+                    {% for company in companies %}
+                    <option value="{{ company.id }}">{{ company.name }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="col-md mx-1 mb-3">
                 <button class="btn btn-primary" type="button">Create</button>
                 <button class="btn btn-outline-primary" type="button">Create and start</button>
                 <button class="btn btn-outline-primary" type="button">Create and finish</button>
-                <button class="btn btn-outline-danger" type="button">Cancel</button>
+                <button class="btn btn-outline-danger" type="reset" data-bs-toggle="collapse" data-bs-target="#newProject">Cancel</button>
             </div>
         </form>
     </div>
     <div class="collapse" id="newCompany" data-bs-parent="#switchPanels">
         <h3>New Company</h3>
-        <form>
+        <form method="post">
             <div class="col my-3 mx-1">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" minlength="3" autofocus>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" minlength="3" autofocus required>
                     <label for="name">Name</label>
                 </div>
             </div>
             <div class="col-md mx-1 mb-3">
-                <button class="btn btn-primary" type="button">Create</button>
+                <button class="btn btn-primary" type="submit">Create</button>
+                <button class="btn btn-outline-danger" type="reset" data-bs-toggle="collapse" data-bs-target="#newCompany">Cancel</button>
             </div>
         </form>
     </div>
