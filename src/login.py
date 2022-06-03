@@ -85,8 +85,8 @@ def register():
     repeat_pw = request.values.get('repeat_pw')
     if name and password and repeat_pw:
         # Repeated password not matching
-        if len(name) < 4 or len(name) > 32:
-            flash('Username must be 4-32 characters.')
+        if len(name) < 3 or len(name) > 32:
+            flash('Username must be 3-32 characters.')
             return redirect(url_for('register'))
         if len(password) < 10:
             flash('Password must be at least 10 characters.')
