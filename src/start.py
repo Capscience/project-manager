@@ -4,6 +4,6 @@ from flask import render_template
 from flask import url_for
 from src import app
 
-@app.route('/')
-def home():
-    return render_template('home.html')
+@app.route('/start/<pid>')
+def start(pid):
+    return

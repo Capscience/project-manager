@@ -13,6 +13,8 @@ class Company(db.Model):
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     name = db.Column(db.String(32), unique = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('account.id',
+                                                  ondelete = 'CASCADE'))
 
 
 class Entry(db.Model):
@@ -36,7 +38,7 @@ class Project(db.Model):
                                                   ondelete = 'CASCADE'))
     company_id = db.Column(db.Integer, db.ForeignKey('company.id',
                                                      ondelete = 'CASCADE'))
-    type_id = db.Column(db.Integer, db.ForeignKey('worktype.id'))
+    type_id = db.Column(db.Integer, db.ForeignKey('work_type.id'))
 
 
 class WorkType(db.Model):

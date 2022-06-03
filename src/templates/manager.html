@@ -15,30 +15,30 @@
 <li class="nav-item">
     <a class="nav-link" type="button" data-bs-toggle="collapse" data-bs-target="#newCompany" aria-expanded="false" aria-controls="newClient">New Company</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" type="button" data-bs-toggle="collapse" data-bs-target="#startCall" aria-expanded="false" aria-controls="startCall">Start Call</a>
-</li>
 {% endblock %}
 
 {% block content %}
 <div class="container" id="switchPanels">
     <div class="collapse" id="newProject" data-bs-parent="#switchPanels">
         <h3>New Project</h3>
-        <form>
+        <form method="post" action="">
             <div class="col my-3 mx-1">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" minlength="3" autofocus>
+                    <input type="text" class="form-control" id="name" name="project_name" placeholder="Name" minlength="4" aria-label="Type project name" autofocus>
                     <label for="name">Name</label>
                 </div>
             </div>
             <div class="col-xl mx-1">
-                <select class="form-select mb-3" aria-label="Select worktype">
-                    <option selected value="0">Default work</option>
-                    <option value="1">Type 1</option>
-                    <option value="2">Type 2</option>
-                    <option value="3">Type 3</option>
+                <select class="form-select mb-3" aria-label="Select worktype" name="worktype">
+                    {% for worktype in worktypes %}
+                    {% if worktype.id == 0 %}
+                    <option selected value="{{ worktype.id }}">{{ worktype.name }} {{ worktype.price }} €/h</option>
+                    {% else %}
+                    <option value="{{ worktype.id }}">{{ worktype.name }} {{ worktype.price }} €/h</option>
+                    {% endif %}
+                    {% endfor %}
                 </select>
-                <select class="form-select mb-3" aria-label="Select client">
+                <select class="form-select mb-3" aria-label="Select client" name="company">
                     <option selected value="0">--select company--</option>
                     {% for company in companies %}
                     <option value="{{ company.id }}">{{ company.name }}</option>
@@ -46,9 +46,9 @@
                 </select>
             </div>
             <div class="col-md mx-1 mb-3">
-                <button class="btn btn-primary" type="button">Create</button>
-                <button class="btn btn-outline-primary" type="button">Create and start</button>
-                <button class="btn btn-outline-primary" type="button">Create and finish</button>
+                <button class="btn btn-primary" type="submit" name="action" value="create">Create</button>
+                <button class="btn btn-outline-primary" type="button" name="action" value="start" disabled>Create and start</button>
+                <button class="btn btn-outline-primary" type="button" name="action" value="finish" disabled>Create and finish</button>
                 <button class="btn btn-outline-danger" type="reset" data-bs-toggle="collapse" data-bs-target="#newProject">Cancel</button>
             </div>
         </form>
@@ -58,7 +58,7 @@
         <form method="post">
             <div class="col my-3 mx-1">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" minlength="3" autofocus required>
+                    <input type="text" class="form-control" id="name" name="company_name" placeholder="Name" minlength="3" autofocus required>
                     <label for="name">Name</label>
                 </div>
             </div>
@@ -81,20 +81,22 @@
             </tr>
         </thead>
         <tbody>
+            {% for project in projects %}
+
             <tr>
                 <td>
-                    <button class="btn btn-outline-dark btn-sm mx-1" data-bs-toggle="collapse" data-bs-target="#project1" aria-expanded="false" aria-controls="project1"><i class="bi bi-list"></i></button>
-                    Project 1
+                    <button class="btn btn-outline-dark btn-sm mx-1" data-bs-toggle="collapse" data-bs-target="#project{{project.id}}" aria-expanded="false" aria-controls="project{{project.id}}"><i class="bi bi-list"></i></button>
+                    {{ project.name }}
                 </td>
-                <td>Yritys oy</td>
-                <td>30 h</td>
+                <td>{{ sql.Company.query.filter_by(id = project.company_id).one_or_none().name }}</td>
+                <td>X h</td>
                 <td style="text-align:right">
                     <button class="btn btn-outline-success btn-sm"><i class="bi bi-play-circle"></i></button>
                     <button class="btn btn-outline-danger btn-sm"><i class="bi bi-stop-circle"></i></button>
                 </td>
             </tr>
             <tr>
-                <td class="collapse" data-bs-parent="#mainTable" id="project1" colspan="4">
+                <td class="collapse" data-bs-parent="#mainTable" id="project{{project.id}}" colspan="4">
                     <div class="card">
                         <div class="card-body">
                             Here goes manual editing stuff and input for session comments.
@@ -103,6 +105,7 @@
                 </td>
             </tr>
 
+            {% endfor %}
         </tbody>
     </table>
 </div>

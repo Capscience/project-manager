@@ -50,8 +50,6 @@ def login():
     """Log in to the app."""
 
     if g.user:
-        flash(f'You are already logged in as {g.user}. \
-              Please log out before logging in on another user.')
         return redirect(url_for('home'))
     
     # Create new login
@@ -66,11 +64,11 @@ def login():
             return redirect(url_for('login'))
         # If login succesful, set session user
         if validate_passwd(user, password):
-            session['user'] = user.name
+            session['user'] = user.id
             return redirect(url_for('home'))
         # Flash error message if login unsuccessful
         flash('Invalid username or password.')
-
+        return redirect(url_for('login'))
     return render_template('login.html')
 
 @app.route('/register', methods = ['GET', 'POST'])
@@ -87,14 +85,20 @@ def register():
     repeat_pw = request.values.get('repeat_pw')
     if name and password and repeat_pw:
         # Repeated password not matching
+        if len(name) < 4 or len(name) > 32:
+            flash('Username must be 4-32 characters.')
+            return redirect(url_for('register'))
+        if len(password) < 10:
+            flash('Password must be at least 10 characters.')
+            return redirect(url_for('register'))
         if password != repeat_pw:
             flash('Please enter matching passwords!')
-            return render_template('register.html')
+            return redirect(url_for('register'))
         # User already exists
         user = sql.Account.query.filter_by(name = name).one_or_none()
         if user:
             flash('Username already exists.')
-            return render_template('register.html')
+            return redirect(url_for('register'))
         # Successful creation of new user
         password = hash_passwd(password)
         db.session.add(sql.Account(name = name, password = password))
@@ -114,4 +118,4 @@ def logout():
     """Log out from the app."""
 
     invalidate_login()
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
