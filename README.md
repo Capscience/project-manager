@@ -2,23 +2,25 @@
 
 A Flask app for easily saving workhours. The project is for University of Helsinki course Tietokantasovellus.
 
-This app aims to make it easy to handle your work projects. It allows the user to use a stopwatch for saving workhours, comments for each session, choosing clients for projects etc.
+This app aims to make it easy to handle your work projects. It allows the user to use a stopwatch for saving workhours, comments for each session, choosing clients for projects etc. App is made for use in work, but it can be used for studies as well. Companies can be thought as courses, and projects as assignments.
 
-A work-in-progress version can be tested in [Heroku](https://tsoha-project-manager.herokuapp.com)
+Latest development version can be tested in [Heroku](https://tsoha-project-manager.herokuapp.com). Make sure to check "Help" section for instructions.
 
 ## Development progress
 
 ### Login and register
 
-Login system is mostly made without using packages like flask-login etc. Passwords are hashed using salted sha512 hashing algorithm. Login and new user registration system works fine, but probably will need some tweaks especially on the UI side.
+Login system is created by hand using flask's session system. Passwords are hashed using salted sha512 hashing algorithm. Login and register system has received a fair amount of tweaks, and works well for now.
 
 ### Main functionality
 
 Main app GUI aims to be easy to use, especially requiring as few clicks as possible to do basic things.
+New companies and projects can be created from the menu bar when in app view. Timing for projects is yet to be implemented.
+
 
 ## Planned features
 
-- login to use app
+- login to use app (done)
 - create and delete your projects
 - time project using start/pause/stop, stop rounds time according to worktype
 - stopwatch can be edited when ending session, if timer has been forgotten on or off

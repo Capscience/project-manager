@@ -2,10 +2,33 @@
 {% set title = "Help" %}
 {% block content %}
 
-<div class="card" style="width: 18rem;">
+<div class="card">
     <div class="card-body">
-        <h5 class="card-title">Instructions</h5>
-        <p class="card-text">The app requires users to create a user and log in. This is necessary to make managed projects saveable and private. For bugs please report an issue to the GitHub link below.</p>
+        <h4 class="card-title mb-2">Instructions</h4>
+        <h5 class="card-subtitle mb-2">1. Create user</h5>
+        <p class="card-text">
+            First thing as a new user is to register a profile for the app. Profile menu can be found on right side of menu bar. After creating your user you will have to login. After that you have access to the app.
+        </p>
+        <h6 class="card-subtitle mb-2 text-muted">Why login?</h6>
+        <p class="card-text">
+            Logging in is important for user safety and ease of use. It allows you to keep your projects and clients to yourself, but also makes using the app easier when you only have your personal projects and companies to manage.
+        </p>
+        <h5 class="card-subtitle mb-2">2. Create a company</h5>
+        <p class="card-text">
+            Before creating projects you must create a client company. In case you are using the app for schoolwork, you can think of this as the course. To create a new company, go to "App" and choose "New Company."
+        </p>
+        <h5 class="card-subtitle mb-2">3. Create a project</h5>
+        <p class="card-text">
+            Now projects can be created by choosing "New Project" from menu bar. You have different worktypes to use, but they can only be added by devs for now. Each worktype has different hourly price, minimum time, and rounding parameters when outputting billing data (not implemented).
+        </p>
+        <h5 class="card-subtitle mb-2">4. Timing projects (yet to be implemented)</h5>
+        <p class="card-text">
+            Projects will be timed by using start/pause and stop buttons. Start button will change into a pause button when pressed. Pausing does not round saved time at all, but stop will round the time according to selected worktype. You can click the expand button to view manual editing option for the project, which are also not implemented as of now.
+        </p>
+        <h5 class="card-subtitle mb-2">General information</h5>
+        <p class="card-text">
+            Currently little functionality is implemented, but development is going smoothly. Ready features have worked well in tests, and the base is pretty much ready for the rest of the app. Please report any issues to GitHub linked below. There you can also find all of the app's source code.
+        </p>
         <a href="https://github.com/Capslock01/project-manager" class="card-link">GitHub</a>
     </div>
 </div>
