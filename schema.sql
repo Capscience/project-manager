@@ -40,8 +40,8 @@ CREATE TABLE project (
 CREATE TABLE entry (
         id SERIAL NOT NULL, 
         project_id INTEGER, 
-        starttime TIMESTAMP WITHOUT TIME ZONE, 
-        endtime TIMESTAMP WITHOUT TIME ZONE, 
+        start TIMESTAMP WITHOUT TIME ZONE, 
+        "end" TIMESTAMP WITHOUT TIME ZONE, 
         comment VARCHAR(128), 
         PRIMARY KEY (id), 
         FOREIGN KEY(project_id) REFERENCES project (id) ON DELETE CASCADE
