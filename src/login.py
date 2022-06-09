@@ -1,5 +1,6 @@
 """Handles login and logout."""
 
+import re
 import functools
 from flask import g
 from flask import redirect
@@ -10,7 +11,6 @@ from flask import url_for
 from flask import flash
 from passlib.hash import sha512_crypt
 from src import app, db
-from src import sql
 
 
 def require_login():
@@ -34,10 +34,10 @@ def hash_passwd(password) -> str:
 
     return sha512_crypt.hash(password)
 
-def validate_passwd(user, password) -> bool:
+def validate_passwd(user, password, user_password) -> bool:
     """Validate user's password."""
 
-    return user and password and sha512_crypt.verify(password, user.password)
+    return user and password and sha512_crypt.verify(password, user_password)
 
 @app.before_request
 def before_request():
@@ -56,20 +56,25 @@ def login():
     invalidate_login()
     name = request.values.get('username')
     password = request.values.get('password')
-    if name and password:
-        user = sql.Account.query.filter_by(name = name).one_or_none()
-        # If user doesn't exist, redirect to register page
-        if not user:
-            flash('Invalid username or password.')
-            return redirect(url_for('login'))
-        # If login succesful, set session user
-        if validate_passwd(user, password):
-            session['user'] = user.id
-            return redirect(url_for('home'))
-        # Flash error message if login unsuccessful
+
+    # If no posts, just render login.html
+    if not name or not password:
+        return render_template('login.html')
+
+    query = 'SELECT id, name, password FROM account WHERE name=:name'
+    result = db.session.execute(query, {'name': name}).fetchone()
+    # If user doesn't exist, redirect to register page
+    if not result:
         flash('Invalid username or password.')
         return redirect(url_for('login'))
-    return render_template('login.html')
+    # If login succesful, set session user
+    if validate_passwd(result[1], password, result[2]):
+        session['user'] = result[0]
+        return redirect(url_for('home'))
+    # Flash error message if login unsuccessful
+    flash('Invalid username or password.')
+    return redirect(url_for('login'))
+    
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -83,29 +88,35 @@ def register():
     name = request.values.get('username')
     password = request.values.get('password')
     repeat_pw = request.values.get('repeat_pw')
-    if name and password and repeat_pw:
-        # Repeated password not matching
-        if len(name) < 3 or len(name) > 32:
-            flash('Username must be 3-32 characters.')
-            return redirect(url_for('register'))
-        if len(password) < 10:
-            flash('Password must be at least 10 characters.')
-            return redirect(url_for('register'))
-        if password != repeat_pw:
-            flash('Please enter matching passwords!')
-            return redirect(url_for('register'))
-        # User already exists
-        user = sql.Account.query.filter_by(name = name).one_or_none()
-        if user:
-            flash('Username already exists.')
-            return redirect(url_for('register'))
-        # Successful creation of new user
-        password = hash_passwd(password)
-        db.session.add(sql.Account(name = name, password = password))
-        db.session.commit()
-        flash(f'User {name} has been successfully created.')
-        return redirect(url_for('login'))
-    return render_template('register.html')
+
+    if not name or not password or not repeat_pw:
+        return render_template('register.html')
+
+    name_regex = '^(?![-._])(?!.*[_.-]{2})[\w.-]{3,32}(?<![-._])$'
+    if re.match(name_regex, name) is None:
+        flash('Invalid username. Please refer to instructions for username.')
+        return redirect(url_for('register'))
+    if len(password) < 10:
+        flash('Password must be at least 10 characters.')
+        return redirect(url_for('register'))
+    if password != repeat_pw:
+        flash('Please enter matching passwords!')
+        return redirect(url_for('register'))
+    # Username taken?
+    query = 'SELECT id, name, password FROM account WHERE name=:name'
+    result = db.session.execute(query, {'name': name}).fetchone()
+    if result:
+        flash('Username already exists.')
+        return redirect(url_for('register'))
+
+    # Successful creation of new user
+    password = hash_passwd(password)
+    insert = 'INSERT INTO account (name, password) VALUES (:name, :password)'
+    db.session.execute(insert, {'name': name, 'password': password})
+    db.session.commit()
+    flash(f'User {name} has been successfully created.')
+    return redirect(url_for('login'))
+    
 
 def invalidate_login():
     """Remove all current user information from session."""
