@@ -28,6 +28,7 @@ def new_project():
             worktypes = worktypes,
             companies = companies
         )
+
     worktype = request.values.get('worktype')
     if worktype:
         worktype = int(worktype)

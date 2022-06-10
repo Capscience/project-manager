@@ -16,11 +16,12 @@ def new_company():
     """Handle new company form."""
 
     company_name = request.values.get('company_name')
-    if company_name:
-        if add_company(company_name):
-            flash('Company added successfully!')
-        return redirect(url_for('manager'))
-    return render_template('companyedit.html')
+    if not company_name:
+        return render_template('companyedit.html')
+
+    if add_company(company_name):
+        flash('Company added successfully!')
+    return redirect(url_for('manager'))
 
 
 def add_company(name: str):
@@ -35,7 +36,7 @@ def add_company(name: str):
     query = 'SELECT * FROM company WHERE name=:name AND user_id=:uid'
     company = db.session.execute(query, {'name': name, 'uid': g.user}).fetchone()
     if company is not None and company[1] == name:
-        flash(f'There already exists a compnay with that name.')
+        flash(f'There already exists a company with that name.')
         return False
     # If all checks successful, create company
     insert = 'INSERT INTO company (name, user_id) VALUES (:name, :uid)'

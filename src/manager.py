@@ -18,8 +18,6 @@ def manager():
     query = """SELECT P.id, P.name, C.name FROM project P, company C
                WHERE C.id=P.company_id AND P.user_id=:uid"""
     projects = db.session.execute(query, {'uid': g.user}).fetchall()
-    for project in projects:
-        print(project.name)
     return render_template(
         'manager.html',
         projects = projects,
