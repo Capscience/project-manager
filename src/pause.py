@@ -21,15 +21,16 @@ def pause(pid: int) -> str:
         db.session.commit()
     return redirect(url_for('manager'))
 
+
 def validate_pause(pid: int) -> bool:
     """Check if project with pid can be paused."""
 
     # Validate pid
     query = 'SELECT * FROM project WHERE user_id=:uid AND id=:pid'
     project = db.session.execute(query, {'uid': g.user, 'pid': pid}).fetchone()
-    if not project:
+    if project is None:
         return False
-    
+
     # Check if project is running
     query = 'SELECT * FROM entry WHERE project_id=:pid ORDER BY start DESC'
     entry = db.session.execute(query, {'pid': pid}).fetchone()

@@ -16,9 +16,14 @@ def manager():
     """Handles the main app function."""
 
     # Get user's projects. E."end" is needed to determine whether project is running or paused
+    # COALESCE("end", NOW()) makes running projects show current time when page is refreshed
     query = """SELECT
                    P.id, P.name, C.name, P.state,
-                   (SELECT SUM(EXTRACT(EPOCH FROM "end"-start))*interval '1 sec' as diff FROM entry WHERE project_id = P.id) as time
+                   (SELECT
+                        SUM(EXTRACT(EPOCH
+                        FROM COALESCE("end", NOW())-start))*interval '1 sec' as diff
+                    FROM entry WHERE project_id = P.id
+                    ) as time
                FROM
                    project P, company C
                WHERE
@@ -29,14 +34,16 @@ def manager():
     return render_template(
         'manager.html',
         projects = projects,
-        timeformat = timeformat
+        timeformat = timeformat # Needed to format times in template
     )
 
 
 def timeformat(timedelta: datetime.timedelta) -> str:
     """Format timedelta object to HH:MM"""
 
-    timedelta = timedelta.seconds
+    if timedelta is None:
+        timedelta = datetime.timedelta(seconds = 0)
+    timedelta = int(timedelta.total_seconds())
     hours = timedelta // 3600
     minutes = timedelta // 60 - (hours * 60)
     seconds = timedelta - (minutes*60) - (hours*3600)

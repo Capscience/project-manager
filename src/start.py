@@ -25,9 +25,10 @@ def validate_start(pid: int) -> bool:
     """Check if project with pid can be started."""
 
     # Validate pid
-    query = 'SELECT * FROM project WHERE user_id=:uid AND id=:pid'
+    query = 'SELECT state FROM project WHERE user_id=:uid AND id=:pid'
     project = db.session.execute(query, {'uid': g.user, 'pid': pid}).fetchone()
-    if not project:
+    # Make sure that project exists and isn't in 'stopped' state
+    if project is None or project[0] == 0:
         return False
     
     # Check if project is running

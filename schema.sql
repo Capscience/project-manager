@@ -8,12 +8,14 @@ CREATE TABLE account (
 CREATE TABLE work_type (
         id SERIAL NOT NULL, 
         name VARCHAR(32), 
-        rounding NUMERIC, 
-        minimum NUMERIC, 
+        rounding INTERVAL MINUTE, 
+        minimum INTERVAL MINUTE, 
         price NUMERIC, 
         PRIMARY KEY (id), 
         UNIQUE (name)
 )
+-- work_type altered to use INTERVAL instead of NUMERIC in rounding and minimum with following command:
+-- ALTER TABLE work_type ALTER COLUMN rounding TYPE INTERVAL MINUTE USING rounding*'1 minute'::interval minute, ALTER COLUMN minimum TYPE INTERVAL MINUTE USING minimum*'1 minute'::interval minute
 
 CREATE TABLE company (
         id SERIAL NOT NULL, 

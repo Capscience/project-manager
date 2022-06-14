@@ -51,7 +51,7 @@
                     {% else %}
                     <a class="btn btn-outline-success btn-sm" role="button" href="{{ url_for('start', pid = project[0]) }}"><i class="bi bi-play-circle"></i></a>
                     {% endif %}
-                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-stop-circle"></i></button>
+                    <a class="btn btn-outline-danger btn-sm" role="button" href="{{ url_for('stop', pid = project[0]) }}"><i class="bi bi-stop-circle"></i></a>
                 </td>
             </tr>
             <tr>
