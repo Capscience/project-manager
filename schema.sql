@@ -25,6 +25,7 @@ CREATE TABLE company (
         UNIQUE (name), 
         FOREIGN KEY(user_id) REFERENCES account (id) ON DELETE CASCADE
 )
+-- user_id binds company to the user who created it, so that companies are kept private
 
 CREATE TABLE project (
         id SERIAL NOT NULL, 

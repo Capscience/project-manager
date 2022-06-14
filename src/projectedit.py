@@ -39,23 +39,25 @@ def new_project():
     # Create project according to action
     outcome = False
     action = request.values.get('action')
-    if action == 'create':
-        outcome = create_project(project_name, company, worktype)
-    elif action == 'start':
-        outcome = create_and_start_project(project_name, company, worktype)
-    elif action == 'finish':
-        outcome = create_and_finish_project(project_name, company, worktype)
-    else:
+    if action not in ('create', 'start', 'finish'):
         flash('Error with submit type. Please contact developers.')
+        return redirect(url_for('manager'))
 
-    # Flash message when creation successful
-    if outcome:
-        flash('Project created successfully!')
-    return redirect(url_for('manager'))
-
+    # Create project, redirects to next page
+    next_page = create_project(project_name, company, worktype, action)
+    return redirect(next_page)
+    
 
 def validate_project(name: str, company: int):
-    """Validate project name and company inputs."""
+    """Validate project name and company inputs.
+    
+    Args:
+        name: Name given for project.
+        company: Selected company id for whick the project is assigned.
+    
+    Returns:
+        True if name is valid and company created.
+        False othervise."""
 
     # Validate project name
     name_regex = '^(?![ _.-])(?!.*[# _.-]{2})[\w# _.-]{4,128}(?<![# _.-])$'
@@ -69,17 +71,29 @@ def validate_project(name: str, company: int):
     return True
 
 
-def create_project(name: str, company: int, worktype: int):
-    """Create project and save it to db."""
+def create_project(name: str, company: int, worktype: int, action: str) -> str:
+    """Create project and save it to database.
+    
+    Args:
+        name: Name given for new project.
+        company: Company id for which the project is assigned.
+        worktype: Project's worktype id.
+        action: Determines if project will be started or finished at creation.
+    
+    Returns:
+        URL for next page.
+    """
 
+    # Creation failed
     if not validate_project(name, company):
-        return False
+        return url_for('new_project')
     
     insert = """INSERT INTO
                     project (name, state, user_id, company_id, type_id)
                 VALUES
-                    (:name, :state, :user_id, :company, :worktype)"""
-    db.session.execute(
+                    (:name, :state, :user_id, :company, :worktype)
+                RETURNING id"""
+    pid = db.session.execute(
         insert,
         {
             'name': name,
@@ -88,14 +102,13 @@ def create_project(name: str, company: int, worktype: int):
             'company': company,
             'worktype': worktype
         }
-    )
+    ).fetchone()
     db.session.commit()
-    return True
-    
 
-def create_and_start_project():
-    return
-
-
-def create_and_finish_project():
-    return
+    # Creation succesful, execute different actions
+    if action == 'create':
+        return url_for('manager')
+    elif action == 'start':
+        return url_for('start', pid = pid[0])
+    elif action == 'finish':
+        return url_for('stop', pid = pid[0])
