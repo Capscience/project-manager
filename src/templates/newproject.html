@@ -18,31 +18,21 @@
 {% endblock %}
 
 {% block content %}
-<h3>Edit Project: {{ project[1] }}</h3>
+<h3>New Project</h3>
 <form method="post" action="">
     <div class="col my-3 mx-1">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="name" name="project_name" placeholder="" minlength="4" aria-label="Rename project">
-            <label for="name">Rename</label>
+            <input type="text" class="form-control" id="name" name="project_name" placeholder="Name" minlength="4" aria-label="Type project name" autofocus>
+            <label for="name">Name</label>
             <div id="name" class="form-text">
-                Leave empty to use same as before. Name must be 4-128 characters. Allowed characters are numbers, all lower and uppercase letters and special characters ._-# and space. Name can't begin or end with a special character or space, except for # that can be used as the first character. Only one special character in a row is allowed.
+                Name must be 4-128 characters. Allowed characters are numbers, all lower and uppercase letters and special characters ._-# and space. Name can't begin or end with a special character or space, except for # that can be used as the first character. Only one special character in a row is allowed.
             </div>
         </div>
     </div>
-    <div class="col my-3 mx-1">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="comment" name="comment" placeholder="" minlength="4" aria-label="Comment">
-            <label for="comment">Comment</label>
-            <div id="comment" class="form-text">
-                Comment must be 4-256 characters. Allowed characters are numbers, all lower and uppercase letters and special characters ._-# and space. Name can't begin or end with a special character or space, except for # that can be used as the first character. Only one special character in a row is allowed.
-            </div>
-        </div>
-    </div>
-    
     <div class="col-xl mx-1">
         <select class="form-select mb-3" aria-label="Select worktype" name="worktype">
             {% for worktype in worktypes %}
-            {% if worktype[0] == project[4] %}
+            {% if worktype[0] == 0 %}
             <option selected value="{{ worktype[0] }}">{{ worktype[1] }} {{ worktype[2] }} €/h</option>
             {% else %}
             <option value="{{ worktype[0] }}">{{ worktype[1] }} {{ worktype[2] }} €/h</option>
@@ -52,16 +42,14 @@
         <select class="form-select mb-3" aria-label="Select client" name="company">
             <option selected value="0">--select company--</option>
             {% for company in companies %}
-            {% if company[0] == project[3] %}
-            <option selected value="{{ company[0] }}">{{ company[1] }}</option>
-            {% else %}
             <option value="{{ company[0] }}">{{ company[1] }}</option>
-            {% endif %}
             {% endfor %}
         </select>
     </div>
     <div class="col-md mx-1 mb-3">
         <button class="btn btn-primary" type="submit" name="action" value="create">Create</button>
+        <button class="btn btn-outline-primary" type="submit" name="action" value="start">Create and start</button>
+        <button class="btn btn-outline-primary" type="submit" name="action" value="finish">Create and finish</button>
         <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
     </div>
 </form>

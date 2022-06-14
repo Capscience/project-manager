@@ -40,7 +40,7 @@
 
             <tr>
                 <td>
-                    <button class="btn btn-outline-dark btn-sm mx-1" data-bs-toggle="collapse" data-bs-target="#project{{project[0]}}" aria-expanded="false" aria-controls="project{{project[0]}}"><i class="bi bi-list"></i></button>
+                    <a class="btn btn-outline-dark btn-sm mx-1" role="button" href="{{ url_for('edit_project', pid = project[0]) }}"><i class="bi bi-pencil"></i></a>
                     {{ project[1] }}
                 </td>
                 <td>{{ project[2] }}</td>
@@ -52,15 +52,6 @@
                     <a class="btn btn-outline-success btn-sm" role="button" href="{{ url_for('start', pid = project[0]) }}"><i class="bi bi-play-circle"></i></a>
                     {% endif %}
                     <a class="btn btn-outline-danger btn-sm" role="button" href="{{ url_for('stop', pid = project[0]) }}"><i class="bi bi-stop-circle"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td class="collapse" data-bs-parent="#mainTable" id="project{{project[0]}}" colspan="4">
-                    <div class="card">
-                        <div class="card-body">
-                            Here goes manual editing stuff and input for session comments.
-                        </div>
-                    </div>
                 </td>
             </tr>
 

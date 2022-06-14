@@ -17,7 +17,7 @@ def new_company():
 
     company_name = request.values.get('company_name')
     if not company_name:
-        return render_template('companyedit.html')
+        return render_template('newcompany.html')
 
     if add_company(company_name):
         flash('Company added successfully!')
