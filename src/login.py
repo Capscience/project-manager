@@ -69,7 +69,7 @@ def login():
         return redirect(url_for('login'))
     # If login succesful, set session user
     if validate_passwd(result[1], password, result[2]):
-        session['user'] = result[0]
+        session['user'] = (result[0], result[1])
         return redirect(url_for('home'))
     # Flash error message if login unsuccessful
     flash('Invalid username or password.')

@@ -22,10 +22,10 @@ def edit_project(pid: int):
     query_worktypes = 'SELECT id, name, price FROM work_type'
     worktypes = db.session.execute(query_worktypes).fetchall()
     query_companies = 'SELECT id, name FROM company WHERE user_id = :uid'
-    companies = db.session.execute(query_companies, {'uid': g.user}).fetchall()
+    companies = db.session.execute(query_companies, {'uid': g.user[0]}).fetchall()
     query_project = """SELECT id, name, state, company_id, type_id
                        FROM project WHERE id = :pid AND user_id = :uid"""
-    project = db.session.execute(query_project, {'pid': pid, 'uid': g.user}).fetchone()
+    project = db.session.execute(query_project, {'pid': pid, 'uid': g.user[0]}).fetchone()
     if project is None:
         flash('No project found.')
         return redirect(url_for('manager'))

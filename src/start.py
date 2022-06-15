@@ -25,7 +25,7 @@ def validate_start(pid: int) -> bool:
 
     # Validate pid
     query = 'SELECT state FROM project WHERE user_id=:uid AND id=:pid'
-    project = db.session.execute(query, {'uid': g.user, 'pid': pid}).fetchone()
+    project = db.session.execute(query, {'uid': g.user[0], 'pid': pid}).fetchone()
     # Make sure that project exists and isn't in 'stopped' state
     if project is None or project[0] == 0:
         return False

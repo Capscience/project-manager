@@ -20,7 +20,7 @@ def new_project():
         query_worktypes = 'SELECT id, name, price FROM work_type'
         worktypes = db.session.execute(query_worktypes).fetchall()
         query_companies = 'SELECT id, name FROM company WHERE user_id = :uid'
-        companies = db.session.execute(query_companies, {'uid': g.user}).fetchall()
+        companies = db.session.execute(query_companies, {'uid': g.user[0]}).fetchall()
         if companies == []:
             flash('You need te create a company before you can create a project.')
 
@@ -99,7 +99,7 @@ def create_project(name: str, company: int, worktype: int, action: str) -> str:
         insert,
         {
             'name': name,
-            'user_id': g.user,
+            'user_id': g.user[0],
             'state': 1,         # 1 = active
             'company': company,
             'worktype': worktype

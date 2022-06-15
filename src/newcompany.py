@@ -33,12 +33,12 @@ def add_company(name: str):
         return False
     # Check for same name company in db
     query = 'SELECT * FROM company WHERE name=:name AND user_id=:uid'
-    company = db.session.execute(query, {'name': name, 'uid': g.user}).fetchone()
+    company = db.session.execute(query, {'name': name, 'uid': g.user[0]}).fetchone()
     if company is not None and company[1] == name:
         flash(f'There already exists a company with that name.')
         return False
     # If all checks successful, create company
     insert = 'INSERT INTO company (name, user_id) VALUES (:name, :uid)'
-    db.session.execute(insert, {'name': name, 'uid': g.user})
+    db.session.execute(insert, {'name': name, 'uid': g.user[0]})
     db.session.commit()
     return True

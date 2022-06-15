@@ -27,7 +27,7 @@ def validate_stop(pid: int):
 
     # Validate pid
     query = 'SELECT state FROM project WHERE user_id=:uid AND id=:pid'
-    project = db.session.execute(query, {'uid': g.user, 'pid': pid}).fetchone()
+    project = db.session.execute(query, {'uid': g.user[0], 'pid': pid}).fetchone()
     if not project or project[0] == 0:
         return False
     

@@ -17,7 +17,7 @@ def delete(pid: int):
     print(request.method)
 
     query_project = 'SELECT * FROM project WHERE id=:pid AND user_id=:uid'
-    project = db.session.execute(query_project, {'pid': pid, 'uid': g.user}).fetchone()
+    project = db.session.execute(query_project, {'pid': pid, 'uid': g.user[0]}).fetchone()
     if project is None:
         flash('Project not found, and therefore not deleted.')
         return redirect(url_for('manager'))

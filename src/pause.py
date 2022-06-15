@@ -27,7 +27,7 @@ def validate_pause(pid: int) -> bool:
 
     # Validate pid
     query = 'SELECT * FROM project WHERE user_id=:uid AND id=:pid'
-    project = db.session.execute(query, {'uid': g.user, 'pid': pid}).fetchone()
+    project = db.session.execute(query, {'uid': g.user[0], 'pid': pid}).fetchone()
     if project is None:
         return False
 

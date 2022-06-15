@@ -39,6 +39,7 @@
                                 <li><a class="dropdown-item" href="{{ url_for('login') }}">Login</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('register') }}">Register</a></li>
                                 {% else %}
+                                <li><a class="dropdown-item">{{ 'Logged in as: %s'|format(g.user[1]) }}</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                                 {% endif %}
                             </ul>

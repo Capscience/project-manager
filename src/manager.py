@@ -25,7 +25,7 @@ def manager():
                           P.company_id = C.id AND P.user_id=:uid AND P.state > 0
                       ORDER BY
                           P.state DESC, P.id DESC"""
-    projects = db.session.execute(query_active, {'uid': g.user}).fetchall()
+    projects = db.session.execute(query_active, {'uid': g.user[0]}).fetchall()
     return render_template(
         'manager.html',
         projects = projects,
@@ -50,7 +50,7 @@ def finished():
                           P.company_id = C.id AND P.user_id=:uid AND P.state = 0
                       ORDER BY
                           P.state DESC, P.id DESC"""
-    projects = db.session.execute(query_active, {'uid': g.user}).fetchall()
+    projects = db.session.execute(query_active, {'uid': g.user[0]}).fetchall()
     return render_template(
         'finished.html',
         projects = projects,
