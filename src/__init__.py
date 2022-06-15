@@ -18,14 +18,16 @@ try:
     app.config.from_pyfile('manager.conf')
 except FileNotFoundError:
     # Secondary method is using environment variables
-    try:
-        database_url = os.getenv("DATABASE_URL").replace('postgres', 'postgresql+psycopg2')
-        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-        print(os.getenv('SECRET_KEY'))
-        app.secret_key = os.getenv("SECRET_KEY")
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    except:
-        print('Secret key or database url not found')
+    database_url = os.getenv("DATABASE_URL").replace('postgres', 'postgresql+psycopg2')
+    if database_url is None:
+        raise EnvironmentError('Environment variable DATABASE_URL is not defined.')
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    secret_key = os.getenv("SECRET_KEY")
+    if secret_key is None:
+        raise EnvironmentError('Environment variable SECRET_KEY is not defined.')
+    app.secret_key = secret_key
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    print('Secret key or database url not found')
 
 db = SQLAlchemy(app)
 

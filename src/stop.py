@@ -54,7 +54,7 @@ def add_rounding_entry(pid: int) -> None:
 
     # Get total time of project
     query = """SELECT SUM(EXTRACT(EPOCH FROM ("end"-start)))*interval '1 sec' as diff
-                FROM entry WHERE project_id = :pid"""
+               FROM entry WHERE project_id = :pid"""
     tot_time = db.session.execute(query, {'pid': pid}).fetchone()
     tot_time = tot_time[0]  # Exctract timedelta object from tuple
     if tot_time is None:
@@ -62,7 +62,7 @@ def add_rounding_entry(pid: int) -> None:
 
     # Get worktype data
     query = """SELECT W.name, W.rounding, W.minimum, W.price
-                FROM work_type W, project P WHERE W.id=P.type_id AND P.id = :pid"""
+               FROM work_type W, project P WHERE W.id=P.type_id AND P.id = :pid"""
     worktype = db.session.execute(query, {'pid': pid}).fetchone()
     rounding = worktype[1]  # rounding and minimum are datetime.timedelta objects
     minimum = worktype[2]
@@ -72,7 +72,7 @@ def add_rounding_entry(pid: int) -> None:
         rounded = minimum
     else:
         # TODO: rounding using timedeltas
-        rounded = rounding * (tot_time//rounding + 1)
+        rounded = rounding * (tot_time // rounding + 1)
     delta = rounded - tot_time
 
     # Create rounding entry to database

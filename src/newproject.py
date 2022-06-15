@@ -15,8 +15,7 @@ from src.login import require_login
 def new_project():
     """Handle new project form."""
 
-    project_name = request.values.get('project_name')
-    if not project_name:
+    if request.method == 'GET':
         # Get worktypes and companies for selections
         query_worktypes = 'SELECT id, name, price FROM work_type'
         worktypes = db.session.execute(query_worktypes).fetchall()
@@ -29,6 +28,8 @@ def new_project():
             companies = companies
         )
 
+    # Get inputs from form
+    project_name = request.values.get('project_name')
     worktype = request.values.get('worktype')
     if worktype:
         worktype = int(worktype)
