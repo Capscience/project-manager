@@ -50,7 +50,6 @@
             {% endfor %}
         </select>
         <select class="form-select mb-3" aria-label="Select client" name="company">
-            <option selected value="0">--select company--</option>
             {% for company in companies %}
             {% if company[0] == project[3] %}
             <option selected value="{{ company[0] }}">{{ company[1] }}</option>
@@ -61,8 +60,9 @@
         </select>
     </div>
     <div class="col-md mx-1 mb-3">
-        <button class="btn btn-primary" type="submit" name="action" value="create">Create</button>
+        <button class="btn btn-primary" type="submit" name="action" value="create">Save</button>
         <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
+        <a class="btn btn-danger" type="button" href="{{ url_for('delete', pid = project[0]) }}"><i class="bi bi-trash3"></i></a>
     </div>
 </form>
 {% endblock %}

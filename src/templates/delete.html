@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title mb-2">Do you want to delete project {{ project[2] }}?</h4>
+        <p class="card-text">
+            Deleting project also deletes all data related to the project. Deletion is permanent. Are you sure you want to delete project "{{ project[2] }}"?
+        </p>
+        <form method="post">
+            <input class="btn btn-danger" type="submit" value="Delete" method="post"></input>
+            <a class="btn btn-outline-primary" type="button" href="{{ url_for('manager') }}">Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
