@@ -27,7 +27,6 @@ except FileNotFoundError:
         raise EnvironmentError('Environment variable SECRET_KEY is not defined.')
     app.secret_key = secret_key
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    print('Secret key or database url not found')
 
 db = SQLAlchemy(app)
 

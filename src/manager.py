@@ -34,8 +34,12 @@ def manager():
     )
 
 
+@app.template_filter()
 def timeformat(timedelta: datetime.timedelta) -> str:
-    """Format timedelta object to HH:MM"""
+    """Format timedelta object to HH:MM:SS.
+    
+    Timedelta shows days, this converts them into hours.
+    """
 
     if timedelta is None:
         timedelta = datetime.timedelta(seconds = 0)

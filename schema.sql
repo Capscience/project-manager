@@ -43,9 +43,11 @@ CREATE TABLE project (
 CREATE TABLE entry (
         id SERIAL NOT NULL, 
         project_id INTEGER, 
-        start TIMESTAMP WITHOUT TIME ZONE, 
-        "end" TIMESTAMP WITHOUT TIME ZONE, 
+        start TIMESTAMP(0) WITHOUT TIME ZONE, 
+        "end" TIMESTAMP(0) WITHOUT TIME ZONE, 
         comment VARCHAR(128), 
         PRIMARY KEY (id), 
         FOREIGN KEY(project_id) REFERENCES project (id) ON DELETE CASCADE
 )
+-- entry altered from TIMESTAMP to TIMESTAMP(0) to use rounding to seconds using following command:
+-- ALTER TABLE entry ALTER COLUMN start TYPE TIMESTAMP(0) WITHOUT TIME ZONE, ALTER COLUMN "end" TYPE TIMESTAMP(0) WITHOUT TIME ZONE;
