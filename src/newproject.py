@@ -29,7 +29,7 @@ def new_project():
         )
 
     # Get inputs from form
-    project_name = request.values.get('project_name')
+    project_name = request.values.get('project_name', '').strip()
     worktype = request.values.get('worktype')
     if worktype:
         worktype = int(worktype)
@@ -38,7 +38,6 @@ def new_project():
         company = int(company)
 
     # Create project according to action
-    outcome = False
     action = request.values.get('action')
     if action not in ('create', 'start', 'finish'):
         flash('Error with submit type. Please contact developers.')
@@ -61,7 +60,7 @@ def validate_project(name: str, company: int):
         False othervise."""
 
     # Validate project name
-    name_regex = '^(?![ _.-])(?!.*[# _.-]{2})[\w# _.-]{4,128}(?<![# _.-])$'
+    name_regex = r'[\w _.-#]{4,128}'
     if re.match(name_regex, name) is None:
         flash('Invalid project name!')
         return False

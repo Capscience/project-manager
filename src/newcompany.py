@@ -15,10 +15,9 @@ from src.login import require_login
 def new_company():
     """Handle new company form."""
 
-    company_name = request.values.get('company_name')
-    if not company_name:
+    if request.method == 'GET':
         return render_template('newcompany.html')
-
+    company_name = request.values.get('company_name', '').strip()
     if add_company(company_name):
         flash('Company added successfully!')
     return redirect(url_for('manager'))
@@ -28,7 +27,7 @@ def add_company(name: str):
     """Validate input and add valid company to db."""
 
     # Validate name
-    name_regex = '^(?![ _.-])(?!.*[ _.-]{2})[\w _.-]{4,128}(?<![ _.-])$'
+    name_regex = r'[\w _.-]{4,128}'
     if re.match(name_regex, name) is None:
         flash('Invalid company name!')
         return False

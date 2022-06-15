@@ -8,7 +8,6 @@ from flask import flash
 from flask import g
 from src import app, db
 from src.login import require_login
-from src.newproject import validate_project
 
 
 @require_login()
@@ -40,7 +39,7 @@ def get_edit_data(pid: int):
     """Handle project edit form data."""
 
     # Get data from form
-    project_name = request.values.get('project_name')
+    project_name = request.values.get('project_name', '').strip()
     worktype = request.values.get('worktype')
     if worktype:
         worktype = int(worktype)

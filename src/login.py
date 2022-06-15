@@ -54,8 +54,8 @@ def login():
     
     # Create new login
     invalidate_login()
-    name = request.values.get('username')
-    password = request.values.get('password')
+    name = request.values.get('username', '').strip()
+    password = request.values.get('password', '').strip()
 
     # If no posts, just render login.html
     if not name or not password:
@@ -85,14 +85,14 @@ def register():
     
     # Create new user
     invalidate_login()
-    name = request.values.get('username')
-    password = request.values.get('password')
-    repeat_pw = request.values.get('repeat_pw')
+    name = request.values.get('username', '').strip()
+    password = request.values.get('password', '').strip()
+    repeat_pw = request.values.get('repeat_pw', '').strip()
 
     if not name or not password or not repeat_pw:
         return render_template('register.html')
 
-    name_regex = '^(?![-._])(?!.*[_.-]{2})[\w.-]{3,32}(?<![-._])$'
+    name_regex = r'[\w_.-#]{4,128}'
     if re.match(name_regex, name) is None:
         flash('Invalid username. Please refer to instructions for username.')
         return redirect(url_for('register'))
