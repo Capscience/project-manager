@@ -11,26 +11,49 @@ from src.login import require_login
 def manager():
     """Handles the main app function."""
 
-    # Get user's projects. E."end" is needed to determine whether project is running or paused
     # COALESCE("end", NOW()) makes running projects show current time when page is refreshed
-    query = """SELECT
-                   P.id, P.name, C.name, P.state,
-                   (SELECT
-                        SUM(EXTRACT(EPOCH
-                        FROM COALESCE("end", NOW())-start))*interval '1 sec' as diff
-                    FROM entry WHERE project_id = P.id
-                    ) as time
-               FROM
-                   project P, company C
-               WHERE
-                   P.company_id = C.id AND P.user_id=:uid
-               ORDER BY
-                   P.state DESC, P.id DESC"""
-    projects = db.session.execute(query, {'uid': g.user}).fetchall()
+    query_active = """SELECT
+                          P.id, P.name, C.name, P.state,
+                          (SELECT
+                               SUM(EXTRACT(EPOCH
+                           FROM COALESCE("end", NOW())-start))*interval '1 sec' as diff
+                               FROM entry WHERE project_id = P.id
+                          ) as time
+                      FROM
+                          project P, company C
+                      WHERE
+                          P.company_id = C.id AND P.user_id=:uid AND P.state > 0
+                      ORDER BY
+                          P.state DESC, P.id DESC"""
+    projects = db.session.execute(query_active, {'uid': g.user}).fetchall()
     return render_template(
         'manager.html',
         projects = projects,
-        timeformat = timeformat # Needed to format times in template
+    )
+
+
+@app.route('/app/finished')
+@require_login()
+def finished():
+    """Show finished projects."""
+
+    query_active = """SELECT
+                          P.id, P.name, C.name, P.state,
+                          (SELECT
+                               SUM(EXTRACT(EPOCH
+                           FROM COALESCE("end", NOW())-start))*interval '1 sec' as diff
+                               FROM entry WHERE project_id = P.id
+                          ) as time
+                      FROM
+                          project P, company C
+                      WHERE
+                          P.company_id = C.id AND P.user_id=:uid AND P.state = 0
+                      ORDER BY
+                          P.state DESC, P.id DESC"""
+    projects = db.session.execute(query_active, {'uid': g.user}).fetchall()
+    return render_template(
+        'finished.html',
+        projects = projects,
     )
 
 

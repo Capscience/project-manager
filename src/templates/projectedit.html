@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set title = 'Edit project' %}
 {% block messages %}
 {% for message in get_flashed_messages() %}
     <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -18,7 +19,7 @@
 {% endblock %}
 
 {% block content %}
-<h3>Edit Project: {{ project[1] }}</h3>
+<h5>{{ project[1] }}</h5>
 <form method="post" action="">
     <div class="col my-3 mx-1">
         <div class="form-floating mb-3">
@@ -59,10 +60,45 @@
             {% endfor %}
         </select>
     </div>
-    <div class="col-md mx-1 mb-3">
-        <button class="btn btn-primary" type="submit" name="action" value="create">Save</button>
-        <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
-        <a class="btn btn-danger" type="button" href="{{ url_for('delete', pid = project[0]) }}"><i class="bi bi-trash3"></i></a>
-    </div>
 </form>
+<div class="table-responsive mt-3">
+    <table class="table table-hover" id="mainTable">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Start time</th>
+                <th scope="col">End time</th>
+                <th scope="col">Total</th>
+                <th scope="col">Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if not entries %}
+            <tr>
+                <td colspan="4">
+                    Project does not have any entries yet.
+                </td>
+            </tr>
+            {% else %}
+            {% for entry in entries %}
+            
+            <tr>
+                <td>
+                    <a class="btn btn-outline-dark btn-sm mx-1" role="button" href="#"><i class="bi bi-pencil"></i></a>
+                    {{ entry[0] }}
+                </td>
+                <td>{{ entry[1] }}</td>
+                <td>{{ entry[2]|timeformat }}</td>
+                <td>{{ entry[3] }}</td>
+            </tr>
+            
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<div class="col-md mx-1 mb-3">
+    <button class="btn btn-primary" type="submit" name="action" value="save">Save</button>
+    <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
+    <a class="btn btn-danger" type="button" href="{{ url_for('delete', pid = project[0]) }}"><i class="bi bi-trash3"></i></a>
+</div>
 {% endblock %}

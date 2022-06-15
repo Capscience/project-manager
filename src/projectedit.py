@@ -26,12 +26,19 @@ def edit_project(pid: int):
     query_project = """SELECT id, name, state, company_id, type_id
                        FROM project WHERE id = :pid AND user_id = :uid"""
     project = db.session.execute(query_project, {'pid': pid, 'uid': g.user}).fetchone()
+    if project is None:
+        flash('No project found.')
+        return redirect(url_for('manager'))
+    query_entries = """SELECT start, "end", "end"-start, comment
+                       FROM entry WHERE project_id = :pid"""
+    entries = db.session.execute(query_entries, {'pid': pid}).fetchall()
 
     return render_template(
         'projectedit.html',
         project = project,
         worktypes = worktypes,
-        companies = companies
+        companies = companies,
+        entries = entries
     )
     
 

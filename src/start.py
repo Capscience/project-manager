@@ -1,6 +1,5 @@
 from flask import redirect
 from flask import g
-from flask import render_template
 from flask import url_for
 from src import app, db
 from src.login import require_login
