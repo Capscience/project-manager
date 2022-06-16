@@ -27,6 +27,7 @@ def manager():
                                project_id = P.id
                                AND comment IS NOT NULL
                                AND comment != 'Rounding entry.'
+                           LIMIT 1
                           ) as comment
                       FROM
                           project P, company C
@@ -77,6 +78,7 @@ def finished():
                                project_id = P.id
                                AND comment IS NOT NULL
                                AND comment != 'Rounding entry.'
+                           LIMIT 1
                           ) as comment
                       FROM
                           project P, company C
