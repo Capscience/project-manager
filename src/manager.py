@@ -18,7 +18,16 @@ def manager():
                                SUM(EXTRACT(EPOCH
                            FROM COALESCE("end", NOW())-start))*interval '1 sec' as diff
                                FROM entry WHERE project_id = P.id
-                          ) as time
+                          ) as time,
+                          (SELECT
+                               comment
+                           FROM
+                               entry
+                           WHERE
+                               project_id = P.id
+                               AND comment IS NOT NULL
+                               AND comment != 'Rounding entry.'
+                          ) as comment
                       FROM
                           project P, company C
                       WHERE
@@ -40,6 +49,7 @@ def manager():
         query_todays_time,
         {'uid': g.user[0]}
     ).fetchone()
+
     return render_template(
         'manager.html',
         projects = projects,
@@ -52,20 +62,29 @@ def manager():
 def finished():
     """Show finished projects."""
 
-    query_active = """SELECT
+    query_finished = """SELECT
                           P.id, P.name, C.name, P.state,
                           (SELECT
                                SUM(EXTRACT(EPOCH
                            FROM COALESCE("end", NOW())-start))*interval '1 sec' as diff
                                FROM entry WHERE project_id = P.id
-                          ) as time
+                          ) as time,
+                          (SELECT
+                               comment
+                           FROM
+                               entry
+                           WHERE
+                               project_id = P.id
+                               AND comment IS NOT NULL
+                               AND comment != 'Rounding entry.'
+                          ) as comment
                       FROM
                           project P, company C
                       WHERE
                           P.company_id = C.id AND P.user_id=:uid AND P.state = 0
                       ORDER BY
                           P.state DESC, P.id DESC"""
-    projects = db.session.execute(query_active, {'uid': g.user[0]}).fetchall()
+    projects = db.session.execute(query_finished, {'uid': g.user[0]}).fetchall()
     return render_template(
         'finished.html',
         projects = projects,

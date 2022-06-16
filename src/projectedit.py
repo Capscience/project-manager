@@ -30,7 +30,8 @@ def edit_project(pid: int):
         flash('No project found.')
         return redirect(url_for('manager'))
     query_entries = """SELECT start, "end", "end"-start, comment
-                       FROM entry WHERE project_id = :pid"""
+                       FROM entry WHERE project_id = :pid
+                       ORDER BY start DESC"""
     entries = db.session.execute(query_entries, {'pid': pid}).fetchall()
 
     return render_template(
