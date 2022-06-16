@@ -26,9 +26,24 @@ def manager():
                       ORDER BY
                           P.state DESC, P.id DESC"""
     projects = db.session.execute(query_active, {'uid': g.user[0]}).fetchall()
+    # Get total work time for the day
+    query_todays_time = """SELECT
+                               SUM(EXTRACT(EPOCH
+                               FROM COALESCE("end", NOW())-start))*interval '1 sec' as diff
+                           FROM
+                               entry E, project P
+                           WHERE
+                               E.project_id = P.id
+                               AND P.user_id = :uid
+                               AND DATE(start) = DATE(NOW())"""
+    todays_time = db.session.execute(
+        query_todays_time,
+        {'uid': g.user[0]}
+    ).fetchone()
     return render_template(
         'manager.html',
         projects = projects,
+        todays_time = todays_time[0]
     )
 
 

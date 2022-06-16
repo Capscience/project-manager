@@ -22,10 +22,11 @@ CREATE TABLE company (
         name VARCHAR(32), 
         user_id INTEGER, 
         PRIMARY KEY (id), 
-        UNIQUE (name), 
         FOREIGN KEY(user_id) REFERENCES account (id) ON DELETE CASCADE
 )
 -- user_id binds company to the user who created it, so that companies are kept private
+-- company.name unique constraint removed to allow different users to create same name company using command:
+-- ALTER TABLE company DROP CONSTRAINT company_name_key;
 
 CREATE TABLE project (
         id SERIAL NOT NULL, 
