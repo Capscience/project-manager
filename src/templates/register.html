@@ -14,21 +14,21 @@
     {% endfor %}
 
     <div class="form-floating mb-3">
-        <input type="username" class="form-control" id="username" name="username" placeholder="username" minlength="3" required autofocus>
+        <input type="text" class="form-control" id="username" name="username" placeholder="username" minlength="3" required autofocus>
         <label for="username">Username</label>
         <div id="username" class="form-text">
             Username must be 3-32 characters. Allowed characters are numbers, all lower and uppercase letters and special characters ._-
         </div>
     </div>
     <div class="form-floating mb-3">
-        <input type="password" class="form-control" id="password" name="password" value="" placeholder="password" minlength="10" required>
+        <input type="password" class="form-control" id="password" name="password" value="" placeholder="password" minlength="10" required autocomplete="new-password">
         <label for="password">Password</label>
         <div id="username" class="form-text">
             Password must be 10 or more characters.
         </div>
     </div>
     <div class="form-floating mb-3">
-        <input type="password" class="form-control" id="repeat_pw" name="repeat_pw" value="" placeholder="repeatpassword" minlength="10" required>
+        <input type="password" class="form-control" id="repeat_pw" name="repeat_pw" value="" placeholder="repeatpassword" minlength="10" required autocomplete="new-password">
         <label for="repeat_pw">Repeat password</label>
     </div>
     <div class="col-md">
