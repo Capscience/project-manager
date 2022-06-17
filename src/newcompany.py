@@ -10,8 +10,8 @@ from src import app, db
 from src.login import require_login
 
 
-@require_login()
 @app.route('/new_company', methods = ['GET', 'POST'])
+@require_login()
 def new_company():
     """Handle new company form."""
 

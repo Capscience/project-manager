@@ -9,8 +9,8 @@ from src import app, db
 from src.login import require_login
 
 
-@require_login()
 @app.route('/delete/<pid>', methods = ['GET', 'POST'])
+@require_login()
 def delete(pid: int):
     """Handle deleting specified project."""
 

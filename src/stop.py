@@ -9,8 +9,8 @@ from src import app, db
 from src.login import require_login
 
 
-@require_login()
 @app.route('/stop/<pid>')
+@require_login()
 def stop(pid: int) -> str:
     """Finish project with pid."""
 

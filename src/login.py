@@ -14,7 +14,11 @@ from src import app, db
 
 
 def require_login():
-    """Check that user is logged in when accessing app."""
+    """Make sure there is a user logged in.
+    
+    DECORATOR MUST BE PLACED BETWEEN @app.route(...) and
+    def func(): row TO WORK!
+    """
 
     def decorator(func):
         """Check access decorator."""
@@ -23,7 +27,7 @@ def require_login():
         def decorated_function(*args, **kwargs):
             """Check that user is logged in."""
 
-            if not g.user:
+            if g.user is None:
                 return redirect(url_for('login'))
             return func(*args, **kwargs)
         return decorated_function

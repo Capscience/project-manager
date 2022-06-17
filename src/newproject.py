@@ -10,8 +10,8 @@ from src import app, db
 from src.login import require_login
 
 
-@require_login()
 @app.route('/new_project', methods = ['GET', 'POST'])
+@require_login()
 def new_project():
     """Handle new project form."""
 

@@ -6,8 +6,8 @@ from src import app, db
 from src.login import require_login
 
 
-@require_login()
 @app.route('/pause/<pid>')
+@require_login()
 def pause(pid: int) -> str:
     """Create start entry for project with given pid."""
 

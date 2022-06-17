@@ -9,8 +9,8 @@ from src import app, db
 from src.login import require_login
 
 
-@require_login()
 @app.route('/edit_project/<pid>', methods = ['GET', 'POST'])
+@require_login()
 def edit_project(pid: int):
     """Handle new project form."""
 

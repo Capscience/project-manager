@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% set title = 'Edit entry' %}
+{% block messages %}
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+{% endblock %}
+
+{% block navbar_addon %}
+<li class="nav-item">
+    <a class="nav-link" type="button" href="{{ url_for('new_project') }}">New Project</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" type="button" href="{{ url_for('new_company') }}">New Company</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="">
+    <div class="col my-3 mx-1">
+        
+    </div>
+    <div class="table-responsive mt-3">
+        <table class="table table-hover" id="mainTable">
+            <thead class="table-dark">
+                <tr>
+                <th scope="col">Start time</th>
+                <th scope="col">End time</th>
+                <th scope="col">Total</th>
+                <th scope="col">Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td>
+                    {{ entry[1] }}
+                </td>
+                <td>{{ entry[2] }}</td>
+                <td>{{ entry[3]|timeformat }}</td>
+                {% if entry[4] %}
+                <td>{{ entry[4] }}</td>
+                {% else %}
+                <td></td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>
+                    <div class="form">
+                        <input type="text" class="form-control" id="start" name="start" placeholder="yyyy-mm-dd hh:mm:ss" minlength="4" aria-label="Start time">
+                    </div>
+                </td>
+                <td>
+                    <div class="form">
+                        <input type="text" class="form-control" id="end" name="end" placeholder="yyyy-mm-dd hh:mm:ss" minlength="4" aria-label="End time">
+                    </div>
+                </td>
+                <td></td>
+                <td>
+                    <div class="form">
+                        <input type="text" class="form-control" id="comment" name="comment" placeholder="New comment" minlength="4" aria-label="New comment">
+                    </div> 
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="col-md mx-1 mb-3">
+    <button class="btn btn-primary" type="submit" name="action" value="save">Save</button>
+    <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
+    <a class="btn btn-danger" type="button" href="#"><i class="bi bi-trash3"></i></a>
+</div>
+</form>
+{% endblock %}

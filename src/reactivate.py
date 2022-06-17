@@ -5,8 +5,8 @@ from src import app, db
 from src.login import require_login
 
 
-@require_login()
 @app.route('/reactivate/<pid>')
+@require_login()
 def reactivate(pid: int) -> str:
     """Create start entry for project with given pid."""
 
@@ -16,6 +16,7 @@ def reactivate(pid: int) -> str:
         db.session.execute(update, {'pid': pid})
         db.session.commit()
     return redirect(url_for('manager'))
+
 
 def validate_reactivation(pid: int) -> bool:
     """Check if project with pid can be started."""
