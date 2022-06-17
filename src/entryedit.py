@@ -15,12 +15,16 @@ from src.login import require_login
 def edit_entry(eid: int):
     """Handle new project form."""
 
-    # MUST CHECK PROJECT USER_ID == G:USER!
-    query_entry = """SELECT id, start, "end", "end"-start, comment
+    query_entry = """SELECT id, start, "end", "end"-start, comment, project_id
                        FROM entry WHERE id = :eid"""
     entry = db.session.execute(query_entry, {'eid': eid}).fetchone()
 
-    if entry is None:
+    # Project must be checked to make sure entries can't be edited by other users.
+    query_project = """SELECT id FROM project
+                       WHERE id = :pid AND user_id = :uid"""
+    project = db.session.execute(query_project, {'pid': entry[5], 'uid': g.user[0]})
+
+    if entry is None or project is None:
         flash('Entry not found.')
         return redirect(url_for('manager'))
 
