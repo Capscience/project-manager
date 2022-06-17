@@ -24,7 +24,7 @@ def edit_project(pid: int):
         return redirect(url_for('manager'))
 
     if request.method == 'POST':
-        if update_and_save(project):
+        if validate_and_save(project):
             flash('Editing successful.')
             return redirect(url_for('manager'))
         return redirect(url_for('edit_project', pid = pid))
@@ -47,7 +47,7 @@ def edit_project(pid: int):
     )
     
 
-def update_and_save(project: tuple) -> bool:
+def validate_and_save(project: tuple) -> bool:
     """Handle project edit form data.
     
     Args:
@@ -68,36 +68,28 @@ def update_and_save(project: tuple) -> bool:
         if re.match(comment_regex, comment) is None:
             flash('Invalid comment!')
             return False
-        # Get latest entry
-        query_entry = """SELECT id, comment
-                         FROM entry
-                         WHERE project_id = :pid
-                         ORDER BY id DESC"""
-        entry = db.session.execute(query_entry, {'pid': project[0]}).fetchone()
-        if not entry or entry[1] is not None:
-            # Times are not needed when entry order is by id
-            insert = """INSERT INTO entry (project_id, comment)
-                        VALUES (:pid, :comment)"""
-            db.session.execute(insert, {'pid': project[0], 'comment': comment})
-            db.session.commit()
-        else:
-            update = """UPDATE entry SET comment = :comment
-                        WHERE id = :id"""
-            db.session.execute(update, {'comment': comment, 'id': entry[0]})
-            db.session.commit()
-    
+        add_comment(comment, project)
+        
+    update = update_project(project_name, worktype, company, project)
+    if update:
+        return True
+    return False
+
+
+def update_project(name: str, worktype: str, company: str, project: tuple):
+    """Check edited values, and update if changed."""
+
     # Check for changes in values, and only update if something changed
     values = {}
     updates = []
-    if project_name and project_name != project[1]:
+    if name and name != project[1]:
         name_regex = r'[\w _.,#-]{4,128}'
-        if re.match(name_regex, project_name) is None:
+        if re.match(name_regex, name) is None:
             flash('Invalid project name!')
             return False
-        values['name'] = project_name
+        values['name'] = name
         updates.append('name = :name')
 
-    # All choices are valid, so no need to further validate
     if worktype:
         worktype = int(worktype)
         if worktype != project[4]:
@@ -116,3 +108,29 @@ def update_and_save(project: tuple) -> bool:
         db.session.execute(update, values)
         db.session.commit()
     return True
+
+
+def add_comment(comment: str, project: tuple) -> None:
+    """Add comment that is already validated."""
+
+    # Get latest entry
+    query_entry = """SELECT id, comment
+                        FROM entry
+                        WHERE project_id = :pid
+                        ORDER BY id DESC"""
+    entry = db.session.execute(query_entry, {'pid': project[0]}).fetchone()
+
+    # If there are no entries, or latest entry has a comment,
+    # create a comment only entry.
+    if not entry or entry[1] is not None:
+        # Times are not needed when entry order is by id
+        insert = """INSERT INTO entry (project_id, comment)
+                    VALUES (:pid, :comment)"""
+        db.session.execute(insert, {'pid': project[0], 'comment': comment})
+        db.session.commit()
+    # If latest entry doesn't have a comment, update the comment there
+    else:
+        update = """UPDATE entry SET comment = :comment
+                    WHERE id = :id"""
+        db.session.execute(update, {'comment': comment, 'id': entry[0]})
+        db.session.commit()
