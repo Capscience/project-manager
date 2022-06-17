@@ -23,7 +23,7 @@ def require_login():
         def decorated_function(*args, **kwargs):
             """Check that user is logged in."""
 
-            if  not g.user:
+            if not g.user:
                 return redirect(url_for('login'))
             return func(*args, **kwargs)
         return decorated_function

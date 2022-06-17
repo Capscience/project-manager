@@ -1,7 +1,6 @@
 import re
 from flask import render_template
 from flask import redirect
-from flask import render_template
 from flask import request
 from flask import url_for
 from flask import flash
@@ -29,7 +28,7 @@ def edit_project(pid: int):
             return redirect(url_for('manager'))
         return redirect(url_for('edit_project', pid = pid))
 
-    query_entries = """SELECT start, "end", "end"-start, comment
+    query_entries = """SELECT start, "end", "end"-start, comment, id
                        FROM entry WHERE project_id = :pid
                        ORDER BY id DESC"""
     entries = db.session.execute(query_entries, {'pid': pid}).fetchall()

@@ -82,7 +82,7 @@
             
             <tr>
                 <td>
-                    <a class="btn btn-outline-dark btn-sm mx-1" role="button" href="#"><i class="bi bi-pencil"></i></a>
+                    <a class="btn btn-outline-dark btn-sm mx-1" role="button" href="{{ url_for('edit_entry', eid = entry[4]) }}"><i class="bi bi-pencil"></i></a>
                     {{ entry[0] }}
                 </td>
                 <td>{{ entry[1] }}</td>
