@@ -103,7 +103,12 @@ def timeformat(timedelta: datetime.timedelta) -> str:
     if timedelta is None:
         timedelta = datetime.timedelta(seconds = 0)
     timedelta = int(timedelta.total_seconds())
+    if timedelta < 0:
+        timedelta *= -1
+        sign = '-'
+    else:
+        sign = ''
     hours = timedelta // 3600
     minutes = timedelta // 60 - (hours * 60)
     seconds = timedelta - (minutes*60) - (hours*3600)
-    return f'{hours:02}:{minutes:02}:{seconds:02}'
+    return f'{sign}{hours:02}:{minutes:02}:{seconds:02}'
