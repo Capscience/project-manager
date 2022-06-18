@@ -105,7 +105,24 @@
 <div class="col-md mx-1 mb-3">
     <button class="btn btn-primary" type="submit" name="action" value="save">Save</button>
     <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
-    <a class="btn btn-danger" type="button" href="{{ url_for('delete', pid = project[0]) }}"><i class="bi bi-trash3"></i></a>
+    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3"></i></button>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete project "{{ project[1] }}"?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Deleting project also deletes <b>all data</b> related to it. Are you sure you want to delete project "{{ project[1] }}"?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit" name="action" value="delete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </form>
 {% endblock %}

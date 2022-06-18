@@ -14,12 +14,15 @@ from src.login import require_login
 def edit_project(pid: int):
     """Handle new project form."""
 
-
     query_project = """SELECT id, name, state, company_id, type_id
                        FROM project WHERE id = :pid AND user_id = :uid"""
     project = db.session.execute(query_project, {'pid': pid, 'uid': g.user[0]}).fetchone()
     if project is None:
         flash('No project found.')
+        return redirect(url_for('manager'))
+    
+    if request.values.get('action') == 'delete':
+        delete(pid)
         return redirect(url_for('manager'))
 
     if request.method == 'POST':
@@ -133,3 +136,13 @@ def add_comment(comment: str, project: tuple) -> None:
                     WHERE id = :id"""
         db.session.execute(update, {'comment': comment, 'id': entry[0]})
         db.session.commit()
+
+
+def delete(pid: int) -> None:
+    """Delete project with given id."""
+
+    delete = 'DELETE FROM project WHERE id=:pid'
+    db.session.execute(delete, {'pid': pid})
+    db.session.commit()
+    flash('Project deleted.')
+    return
