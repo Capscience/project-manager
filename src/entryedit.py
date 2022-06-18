@@ -27,6 +27,10 @@ def edit_entry(eid: int):
     if entry is None or project is None:
         flash('Entry not found.')
         return redirect(url_for('manager'))
+    
+    if request.values.get('action') == 'delete':
+        delete(eid)
+        return redirect(url_for('manager'))
 
     if request.method == 'POST':
         if validate_and_save(entry):
@@ -116,3 +120,13 @@ def edit_comment(comment: str, entry: tuple) -> None:
         db.session.commit()
         return True
     return False
+
+
+def delete(eid: int) -> None:
+    """Delete entry with given id."""
+
+    delete = 'DELETE FROM entry WHERE id=:eid'
+    db.session.execute(delete, {'eid': eid})
+    db.session.commit()
+    flash('Entry deleted.')
+    return
