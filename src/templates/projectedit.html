@@ -63,6 +63,13 @@
             {% endfor %}
         </select>
     </div>
+    <p>Times added with these buttons will be saved immediately. You can remove entries from entry edit page.</p>
+    <div class="row mb-3">
+        <div class="col-sm-auto">
+            <button class="btn btn-primary" type="submit" name="action" value="plus">Add {{ project[5].seconds//60 }} minutes</button>
+            <button class="btn btn-primary" type="submit" name="action" value="minus">Remove {{ project[5].seconds//60 }} minutes</button>
+        </div>
+    </div>
     <div class="table-responsive mt-3">
         <table class="table table-hover" id="mainTable">
             <thead class="table-dark">

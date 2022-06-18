@@ -1,4 +1,5 @@
 import re
+import datetime
 from flask import render_template
 from flask import redirect
 from flask import request
@@ -14,14 +15,24 @@ from src.login import require_login
 def edit_project(pid: int):
     """Handle new project form."""
 
-    query_project = """SELECT id, name, state, company_id, type_id
-                       FROM project WHERE id = :pid AND user_id = :uid"""
+    query_project = """SELECT
+                           P.id, P.name, P.state, P.company_id, P.type_id, W.rounding
+                       FROM
+                           project P, work_type W
+                       WHERE
+                           P.id = :pid AND P.user_id = :uid and P.type_id = W.id"""
     project = db.session.execute(query_project, {'pid': pid, 'uid': g.user[0]}).fetchone()
     if project is None:
         flash('No project found.')
         return redirect(url_for('manager'))
     
-    if request.values.get('action') == 'delete':
+    if request.values.get('action') == 'plus':
+        add_rounding(pid, project[5])
+        return redirect(url_for('edit_project', pid = pid))
+    elif request.values.get('action') == 'minus':
+        remove_rounding(pid, project[5])
+        return redirect(url_for('edit_project', pid = pid))
+    elif request.values.get('action') == 'delete':
         delete(pid)
         return redirect(url_for('manager'))
 
@@ -145,4 +156,28 @@ def delete(pid: int) -> None:
     db.session.execute(delete, {'pid': pid})
     db.session.commit()
     flash('Project deleted.')
+    return
+
+
+def add_rounding(pid: int, rounding: datetime.timedelta) -> None:
+    """Add entry with time rounding."""
+
+    insert = """INSERT INTO entry
+                    (project_id, start, "end")
+                VALUES
+                    (:pid, NOW() - :rounding, NOW())"""
+    db.session.execute(insert, {'pid': pid, 'rounding': rounding})
+    db.session.commit()
+    return
+
+
+def remove_rounding(pid: int, rounding: datetime.timedelta) -> None:
+    """Add entry with time negative rounding."""
+
+    insert = """INSERT INTO entry
+                    (project_id, start, "end")
+                VALUES
+                    (:pid, NOW() + :rounding, NOW())"""
+    db.session.execute(insert, {'pid': pid, 'rounding': rounding})
+    db.session.commit()
     return
