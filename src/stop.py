@@ -71,8 +71,15 @@ def add_rounding_entry(pid: int) -> None:
     if tot_time < minimum:
         rounded = minimum
     else:
-        # TODO: rounding using timedeltas
-        rounded = rounding * (tot_time // rounding + 1)
+        # If tounding time is 0, don't round, only update state
+        try:
+            rounded = rounding * (tot_time // rounding + 1)
+        except ZeroDivisionError:
+            update = 'UPDATE project SET state=0 WHERE id=:pid'
+            db.session.execute(update, {'pid': pid})
+            db.session.commit()
+            return
+
     delta = rounded - tot_time
 
     # Create rounding entry to database

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% set title = 'New worktype' %}
+{% block messages %}
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+{% endblock %}
+
+{% block navbar_addon %}
+<li class="nav-item">
+    <a class="nav-link" type="button" href="{{ url_for('new_project') }}">New Project</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" type="button" href="{{ url_for('new_company') }}">New Company</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" type="button" href="{{ url_for('new_worktype') }}">New Worktype</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<h5>Created worktypes are public for all users.</h5>
+<form method="post">
+    <div class="row my-3">
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" minlength="4" aria-label="Worktype name" autofocus required>
+                <label for="name">Name</label>
+                <div id="name" class="form-text">
+                    Name must be 4-128 characters. Allowed characters are numbers, all lower and uppercase letters, special characters ._- and space.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="rounding" name="rounding" placeholder="" minlength="1" aria-label="Rounding time" required>
+                <label for="rounding">Rounding time</label>
+                <div id="rounding" class="form-text">
+                    What amount of time is worktimes rounded to when finishing project? For example, 30 minutes means, that the times will be rounded to next half hour. Use integers only, 0 disables rounding.
+                </div>
+            </div>
+        </div>
+        <div class="col-md-auto">
+            <select class="form-select" aria-label="Select rounding unit" name="rounding_unit">
+                <option selected value="1">min</option>
+                <option value="2">h</option>
+            </select>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="minimum" name="minimum" placeholder="" minlength="1" aria-label="Minimum time" required>
+                <label for="minimum">Minimum time</label>
+                <div id="minimum" class="form-text">
+                    Minimum time for the worktype. If total time of project is smaller when rounding, total time will be rounded to this time. Use integers only, 0 is valid.
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-auto">
+            <select class="form-select" aria-label="Select minimum time unit" name="min_unit">
+                <option selected value="1">min</option>
+                <option value="2">h</option>
+            </select>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="price" name="price" placeholder="" minlength="1" aria-label="Price per hour">
+                <label for="price">Price (€/h)</label>
+                <div id="minimum" class="form-text">
+                    Worktype price. Use integers only. If no price is specified, 0 €/h will be used.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-3">
+        <button class="btn btn-primary" type="submit">Create</button>
+        <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}
