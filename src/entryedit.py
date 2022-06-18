@@ -16,7 +16,7 @@ def edit_entry(eid: int):
     """Handle new project form."""
 
     query_entry = """SELECT id, start, "end", "end"-start, comment, project_id
-                       FROM entry WHERE id = :eid"""
+                     FROM entry WHERE id = :eid"""
     entry = db.session.execute(query_entry, {'eid': eid}).fetchone()
 
     # Project must be checked to make sure entries can't be edited by other users.
