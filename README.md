@@ -6,7 +6,13 @@ This app aims to make it easy to handle your work projects. It allows the user t
 
 Latest version can be tested in [Heroku](https://tsoha-project-manager.herokuapp.com). Instructions can be found below as well as in help-page of the app.
 
-[SQL scheme](/scheme.sql)
+[SQL scheme](/schema.sql)
+
+[Instructions](https://github.com/Capslock01/project-manager#instructions)
+
+[Development progress](https://github.com/Capslock01/project-manager#development-progress)
+
+[Known issues](https://github.com/Capslock01/project-manager#known-issues)
 
 ## Instructions
 
@@ -40,7 +46,7 @@ Projects can be deleted from editing view. This also deletes all entries for tha
 
 The app aims to be simple to use, yet versatile. Almost all planned features are done, and work very well in testing. Code has been checked using pylint, pycodestyle and flake8, and has very few errors.
 
-## Planned features
+### Planned features
 
 - login to use app (done)
 - create and delete your projects (done)
@@ -56,8 +62,6 @@ The app aims to be simple to use, yet versatile. Almost all planned features are
 - pause all projects easily using a single button in case of phonecalls or other interruptions
 - restart project after saving it (done)
 - when creating a project allow user to create it, create and start it, or create and stop, which automatically saves an entry with minimum time for that worktype (done)
-
-## Implementation
 
 ### Tables
 
