@@ -2,7 +2,7 @@
 {% set title = "Help" %}
 {% block content %}
 
-<div class="card">
+<div class="card mb-3">
     <div class="card-body">
         <h4 class="card-title mb-2">Instructions</h4>
         <h5 class="card-subtitle mb-2">1. Create user</h5>
@@ -15,20 +15,33 @@
         </p>
         <h5 class="card-subtitle mb-2">2. Create a company</h5>
         <p class="card-text">
-            Before creating projects you must create a client company. In case you are using the app for schoolwork, you can think of this as the course. To create a new company, go to "App" and choose "New Company."
+            Before creating projects you must create a client company. In case you are using the app for schoolwork, you can think of this as the course. To create a new company, go to "App" and choose "New Company." Companies are bound to users, so other users can't see companies created by you.
         </p>
         <h5 class="card-subtitle mb-2">3. Create a project</h5>
         <p class="card-text">
-            Now projects can be created by choosing "New Project" from menu bar. You have different worktypes to use, but they can only be added by devs for now. Each worktype has different hourly price, minimum time, and rounding parameters when outputting billing data (not implemented).
+            Now projects can be created by choosing "New Project" from menu bar. There are 3 different creation buttons. You can create projects and start timing it right away.
+            You can also create projects without starting them. This can be used to create a TODO list of active projects. Third option is creating a project and finishing it right away.
+            This can be used when you know the project will take less than the minimum time, or if you have already done the project without timing it. Project will be finished with minimum time specified by worktype in this case.
         </p>
-        <h5 class="card-subtitle mb-2">4. Timing projects (yet to be implemented)</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Worktypes</h6>
         <p class="card-text">
-            Projects will be timed by using start/pause and stop buttons. Start button will change into a pause button when pressed. Pausing does not round saved time at all, but stop will round the time according to selected worktype. You can click the expand button to view manual editing option for the project, which are also not implemented as of now.
+            Worktypes are used for rounding project times when you finish project. Hours are often rounded to the next half hour, and sometimes there are separate minimum times. There are 3 premade worktypes.
+            Default: rounding to next full 30 min, minimum time 30 min and price 20 €/h.
+            Short task: rounding to next full minute, minimum time 10 minutes and price 30 €/h.
+            Free: rounding to next full minute, minimum time 1 minute and price 0 €/h.
+            Worktype prices will be used to calculate project prices, which is yet to be implemented. Worktypes can be created by users, but created worktypes will be public to all users.
         </p>
-        <h5 class="card-subtitle mb-2">General information</h5>
+        <h5 class="card-subtitle mb-2">4. Timing projects</h5>
         <p class="card-text">
-            Currently little functionality is implemented, but development is going smoothly. Ready features have worked well in tests, and the base is pretty much ready for the rest of the app. Please report any issues to GitHub linked below. There you can also find all of the app's source code.
+            Projects will be timed by using start/pause and stop buttons. Start button will change into a pause button when pressed. Pausing does not round saved time at all, but stop will round the time according to selected worktype.
+            When you are done with a project, you can click the red "stop" button. Total time will be rounded according to worktype, and the project will be set finished. Finished projects can be found behind the link below the list of active projects.
         </p>
+        <h5 class="card-subtitle mb-2">5. Editing and commenting</h5>
+        <p class="card-text">
+            Project can be edited by clicking the edit button marked with a pencil icon. You can add a comment for example to take notes on progress. You can also rename the project, change worktype and change client company. There are buttons to easily move project time to next or previous rounding step.
+            You can also view all entries for that project. You can see when you have worked on a project and for how long. Entries can also be edited in case of mistakes when timing etc. You can change start/end times and edit comments. Entries can also be deleted here one-by-one. Projects can also be deleted from editing view, and this also deletes all entries for that project.
+        </p>
+        <h5 class="card-subtitle mb-2">Any feedback or problems can be submitted as github issues:</h5>
         <a href="https://github.com/Capslock01/project-manager" class="card-link">GitHub</a>
     </div>
 </div>
