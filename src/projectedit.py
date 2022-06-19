@@ -37,18 +37,19 @@ def edit_project(pid: int):
             'uid': g.user[0]
         }
     ).fetchone()
+
     if project is None:
         flash('No project found.')
         return redirect(url_for('manager'))
 
     if request.method == 'POST':
-        if request.values.get('action') is not None:
-            next_url = handle_actions(pid, project[5])
-            return redirect(next_url)
-        if validate_and_save(project):
-            flash('Editing successful.')
-            return redirect(url_for('manager'))
-        return redirect(url_for('edit_project', pid=pid))
+        if request.values.get('action') == 'save':
+            if validate_and_save(project):
+                flash('Editing successful.')
+                return redirect(url_for('manager'))
+            return redirect(url_for('edit_project', pid=pid))
+        next_url = handle_actions(pid, project[5])
+        return redirect(next_url)
 
     query_entries = """SELECT start, "end", "end"-start, comment, id
                        FROM entry WHERE project_id = :pid
@@ -59,6 +60,7 @@ def edit_project(pid: int):
             'pid': pid
         }
     ).fetchall()
+
     query_worktypes = 'SELECT id, name, price FROM work_type'
     worktypes = db.session.execute(query_worktypes).fetchall()
     query_companies = """SELECT id, name FROM company
@@ -88,7 +90,10 @@ def handle_actions(pid: int, rounding: datetime.timedelta) -> str:
     if request.values.get('action') == 'minus':
         remove_rounding(pid, rounding)
         return url_for('edit_project', pid=pid)
-    delete(pid)
+    if request.values.get('action') == 'delete':
+        delete(pid)
+        return url_for('manager')
+    flash('Invalid action! Please contact developer!')
     return url_for('manager')
 
 
