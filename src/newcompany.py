@@ -1,5 +1,6 @@
+"""Handles creating a new company."""
+
 import re
-from flask import render_template
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -10,7 +11,7 @@ from src import app, db
 from src.login import require_login
 
 
-@app.route('/new_company', methods = ['GET', 'POST'])
+@app.route('/new_company', methods=['GET', 'POST'])
 @require_login()
 def new_company():
     """Handle new company form."""
@@ -33,9 +34,15 @@ def add_company(name: str):
         return False
     # Check for same name company in db
     query = 'SELECT * FROM company WHERE name=:name AND user_id=:uid'
-    company = db.session.execute(query, {'name': name, 'uid': g.user[0]}).fetchone()
+    company = db.session.execute(
+        query,
+        {
+            'name': name,
+            'uid': g.user[0]
+        }
+    ).fetchone()
     if company is not None and company[1] == name:
-        flash(f'There already exists a company with that name.')
+        flash('There already exists a company with that name.')
         return False
     # If all checks successful, create company
     insert = 'INSERT INTO company (name, user_id) VALUES (:name, :uid)'

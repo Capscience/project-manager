@@ -1,3 +1,5 @@
+"""Handle editing projects."""
+
 import re
 import datetime
 from flask import render_template
@@ -10,65 +12,92 @@ from src import app, db
 from src.login import require_login
 
 
-@app.route('/edit_project/<pid>', methods = ['GET', 'POST'])
+@app.route('/edit_project/<pid>', methods=['GET', 'POST'])
 @require_login()
 def edit_project(pid: int):
-    """Handle new project form."""
+    """Handle project editing form."""
 
     query_project = """SELECT
-                           P.id, P.name, P.state, P.company_id, P.type_id, W.rounding
+                           P.id,
+                           P.name,
+                           P.state,
+                           P.company_id,
+                           P.type_id,
+                           W.rounding
                        FROM
                            project P, work_type W
                        WHERE
-                           P.id = :pid AND P.user_id = :uid and P.type_id = W.id"""
-    project = db.session.execute(query_project, {'pid': pid, 'uid': g.user[0]}).fetchone()
+                           P.id = :pid
+                           AND P.user_id = :uid
+                           AND P.type_id = W.id"""
+    project = db.session.execute(
+        query_project,
+        {
+            'pid': pid,
+            'uid': g.user[0]
+        }
+    ).fetchone()
     if project is None:
         flash('No project found.')
         return redirect(url_for('manager'))
-    
-    if request.values.get('action') == 'plus':
-        add_rounding(pid, project[5])
-        return redirect(url_for('edit_project', pid = pid))
-    elif request.values.get('action') == 'minus':
-        remove_rounding(pid, project[5])
-        return redirect(url_for('edit_project', pid = pid))
-    elif request.values.get('action') == 'delete':
-        delete(pid)
-        return redirect(url_for('manager'))
 
     if request.method == 'POST':
+        if request.values.get('action') is not None:
+            next_url = handle_actions(pid, project[5])
+            return redirect(next_url)
         if validate_and_save(project):
             flash('Editing successful.')
             return redirect(url_for('manager'))
-        return redirect(url_for('edit_project', pid = pid))
+        return redirect(url_for('edit_project', pid=pid))
 
     query_entries = """SELECT start, "end", "end"-start, comment, id
                        FROM entry WHERE project_id = :pid
                        ORDER BY id DESC"""
-    entries = db.session.execute(query_entries, {'pid': pid}).fetchall()
+    entries = db.session.execute(
+        query_entries,
+        {
+            'pid': pid
+        }
+    ).fetchall()
     query_worktypes = 'SELECT id, name, price FROM work_type'
     worktypes = db.session.execute(query_worktypes).fetchall()
-    query_companies = 'SELECT id, name FROM company WHERE user_id = :uid'
-    companies = db.session.execute(query_companies, {'uid': g.user[0]}).fetchall()
+    query_companies = """SELECT id, name FROM company
+                         WHERE user_id = :uid"""
+    companies = db.session.execute(
+        query_companies,
+        {
+            'uid': g.user[0]
+        }
+    ).fetchall()
 
     return render_template(
         'projectedit.html',
-        project = project,
-        worktypes = worktypes,
-        companies = companies,
-        entries = entries
+        project=project,
+        worktypes=worktypes,
+        companies=companies,
+        entries=entries
     )
-    
+
+
+def handle_actions(pid: int, rounding: datetime.timedelta) -> str:
+    """Handle posts with action specified."""
+
+    if request.values.get('action') == 'plus':
+        add_rounding(pid, rounding)
+        return url_for('edit_project', pid=pid)
+    if request.values.get('action') == 'minus':
+        remove_rounding(pid, rounding)
+        return url_for('edit_project', pid=pid)
+    delete(pid)
+    return url_for('manager')
+
 
 def validate_and_save(project: tuple) -> bool:
     """Handle project edit form data.
-    
+
     Args:
         project: (id, name, state, company_id, type_id)
     """
-
-    #(15, 'testi', 1, 3, 0)
-    # 0 3
 
     # Get data from form
     project_name = request.values.get('project_name', '').strip()
@@ -82,7 +111,7 @@ def validate_and_save(project: tuple) -> bool:
             flash('Invalid comment!')
             return False
         add_comment(comment, project)
-        
+
     update = update_project(project_name, worktype, company, project)
     if update:
         return True
@@ -113,7 +142,7 @@ def update_project(name: str, worktype: str, company: str, project: tuple):
         if company != project[3]:
             values['company'] = company
             updates.append('company_id = :company')
-    
+
     if len(updates) > 0:
         values['pid'] = project[0]
         update = f"""UPDATE project SET {', '.join(updates)}
@@ -152,11 +181,10 @@ def add_comment(comment: str, project: tuple) -> None:
 def delete(pid: int) -> None:
     """Delete project with given id."""
 
-    delete = 'DELETE FROM project WHERE id=:pid'
-    db.session.execute(delete, {'pid': pid})
+    delete_sql = 'DELETE FROM project WHERE id=:pid'
+    db.session.execute(delete_sql, {'pid': pid})
     db.session.commit()
     flash('Project deleted.')
-    return
 
 
 def add_rounding(pid: int, rounding: datetime.timedelta) -> None:
@@ -168,7 +196,6 @@ def add_rounding(pid: int, rounding: datetime.timedelta) -> None:
                     (:pid, NOW() - :rounding, NOW())"""
     db.session.execute(insert, {'pid': pid, 'rounding': rounding})
     db.session.commit()
-    return
 
 
 def remove_rounding(pid: int, rounding: datetime.timedelta) -> None:
@@ -180,4 +207,3 @@ def remove_rounding(pid: int, rounding: datetime.timedelta) -> None:
                     (:pid, NOW() + :rounding, NOW())"""
     db.session.execute(insert, {'pid': pid, 'rounding': rounding})
     db.session.commit()
-    return

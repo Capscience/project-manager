@@ -15,7 +15,7 @@ from src import app, db
 
 def require_login():
     """Make sure there is a user logged in.
-    
+
     DECORATOR MUST BE PLACED BETWEEN @app.route(...) and
     def func(): row TO WORK!
     """
@@ -33,15 +33,18 @@ def require_login():
         return decorated_function
     return decorator
 
+
 def hash_passwd(password) -> str:
     """Return password hash as string."""
 
     return sha512_crypt.hash(password)
 
+
 def validate_passwd(user, password, user_password) -> bool:
     """Validate user's password."""
 
     return user and password and sha512_crypt.verify(password, user_password)
+
 
 @app.before_request
 def before_request():
@@ -49,13 +52,14 @@ def before_request():
 
     g.user = session.get('user')
 
-@app.route('/login', methods = ['GET', 'POST'])
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     """Log in to the app."""
 
     if g.user:
         return redirect(url_for('home'))
-    
+
     # Create new login
     invalidate_login()
     name = request.values.get('username', '').strip()
@@ -78,15 +82,15 @@ def login():
     # Flash error message if login unsuccessful
     flash('Invalid username or password.')
     return redirect(url_for('login'))
-    
 
-@app.route('/register', methods = ['GET', 'POST'])
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     """Register a new user."""
 
     if g.user:
         return redirect(url_for('home'))
-    
+
     # Create new user
     invalidate_login()
     name = request.values.get('username', '').strip()
@@ -99,18 +103,21 @@ def register():
     name_regex = r'[\w_.-]{4,128}'
     if re.match(name_regex, name) is None:
         flash('Invalid username. Please refer to instructions for username.')
-        return redirect(url_for('register'))
+        invalid_name = True
     if len(password) < 10:
         flash('Password must be at least 10 characters.')
-        return redirect(url_for('register'))
+        invalid_pw = True
     if password != repeat_pw:
         flash('Please enter matching passwords!')
-        return redirect(url_for('register'))
+        invalid_repeat_pw = True
     # Username taken?
     query = 'SELECT id, name, password FROM account WHERE name=:name'
     result = db.session.execute(query, {'name': name}).fetchone()
     if result:
         flash('Username already exists.')
+        username_taken = True
+
+    if invalid_name or invalid_pw or invalid_repeat_pw or username_taken:
         return redirect(url_for('register'))
 
     # Successful creation of new user
@@ -120,13 +127,14 @@ def register():
     db.session.commit()
     flash(f'User {name} has been successfully created.')
     return redirect(url_for('login'))
-    
+
 
 def invalidate_login():
     """Remove all current user information from session."""
 
     session.pop('user', None)
     g.user = None
+
 
 @app.route('/logout')
 def logout():

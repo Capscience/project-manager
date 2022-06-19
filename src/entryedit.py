@@ -1,3 +1,5 @@
+"""Module that handles editing entries."""
+
 import re
 from datetime import datetime
 from flask import render_template
@@ -10,24 +12,32 @@ from src import app, db
 from src.login import require_login
 
 
-@app.route('/edit_entry/<eid>', methods = ['GET', 'POST'])
+@app.route('/edit_entry/<eid>', methods=['GET', 'POST'])
 @require_login()
 def edit_entry(eid: int):
     """Handle new project form."""
 
-    query_entry = """SELECT id, start, "end", "end"-start, comment, project_id
+    query_entry = """SELECT
+                         id, start, "end", "end"-start, comment, project_id
                      FROM entry WHERE id = :eid"""
     entry = db.session.execute(query_entry, {'eid': eid}).fetchone()
 
-    # Project must be checked to make sure entries can't be edited by other users.
+    # Project must be checked to make sure
+    # entries can't be edited by other users.
     query_project = """SELECT id FROM project
                        WHERE id = :pid AND user_id = :uid"""
-    project = db.session.execute(query_project, {'pid': entry[5], 'uid': g.user[0]})
+    project = db.session.execute(
+        query_project,
+        {
+            'pid': entry[5],
+            'uid': g.user[0]
+        }
+    ).fetchone()
 
     if entry is None or project is None:
         flash('Entry not found.')
         return redirect(url_for('manager'))
-    
+
     if request.values.get('action') == 'delete':
         delete(eid)
         return redirect(url_for('manager'))
@@ -36,13 +46,13 @@ def edit_entry(eid: int):
         if validate_and_save(entry):
             flash('Editing successful.')
             return redirect(url_for('manager'))
-        return redirect(url_for('edit_entry', eid = eid))
+        return redirect(url_for('edit_entry', eid=eid))
 
     return render_template(
         'entryedit.html',
-        entry = entry
+        entry=entry
     )
-    
+
 
 def validate_and_save(entry: tuple) -> bool:
     """Handle project edit form data.
@@ -76,7 +86,7 @@ def update_entry(start: str, end: str, entry: tuple):
     # Check for changes in values, and only update if something changed
     values = {}
     updates = []
-    
+
     if start:
         try:
             start = datetime.strptime(start, '%Y-%m-%d %H:%M:%S')
@@ -85,7 +95,7 @@ def update_entry(start: str, end: str, entry: tuple):
             return False
         values['start'] = start
         updates.append('start = :start')
-            
+
     if end:
         try:
             end = datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
@@ -94,7 +104,7 @@ def update_entry(start: str, end: str, entry: tuple):
             return False
         values['end'] = end
         updates.append('"end" = :end')
-    
+
     if len(updates) > 0:
         values['eid'] = entry[0]
         update = f"""UPDATE entry SET {', '.join(updates)}
@@ -113,7 +123,7 @@ def edit_comment(comment: str, entry: tuple) -> None:
                      WHERE id = :eid"""
     old_comment = db.session.execute(query_entry, {'eid': entry[0]}).fetchone()
 
-    if old_comment != 'Rounding entry.' and old_comment != comment:
+    if old_comment not in ['Rounding entry.', comment]:
         update = """UPDATE entry SET comment = :comment
                     WHERE id = :id"""
         db.session.execute(update, {'comment': comment, 'id': entry[0]})
@@ -125,8 +135,7 @@ def edit_comment(comment: str, entry: tuple) -> None:
 def delete(eid: int) -> None:
     """Delete entry with given id."""
 
-    delete = 'DELETE FROM entry WHERE id=:eid'
-    db.session.execute(delete, {'eid': eid})
+    delete_sql = 'DELETE FROM entry WHERE id=:eid'
+    db.session.execute(delete_sql, {'eid': eid})
     db.session.commit()
     flash('Entry deleted.')
-    return

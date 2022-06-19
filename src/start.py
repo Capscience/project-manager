@@ -1,3 +1,5 @@
+"""Handles starting a project."""
+
 from flask import redirect
 from flask import g
 from flask import url_for
@@ -20,22 +22,31 @@ def start(pid: int) -> str:
         db.session.commit()
     return redirect(url_for('manager'))
 
+
 def validate_start(pid: int) -> bool:
     """Check if project with pid can be started."""
 
     # Validate pid
     query = 'SELECT state FROM project WHERE user_id=:uid AND id=:pid'
-    project = db.session.execute(query, {'uid': g.user[0], 'pid': pid}).fetchone()
+    project = db.session.execute(
+        query,
+        {
+            'uid': g.user[0],
+            'pid': pid
+        }
+    ).fetchone()
     # Make sure that project exists and isn't in 'stopped' state
     if project is None or project[0] == 0:
         return False
-    
+
     # Check if project is running
     query = 'SELECT * FROM entry WHERE project_id=:pid ORDER BY id DESC'
     entry = db.session.execute(query, {'pid': pid}).fetchone()
-    # example entry: (1, 1, datetime.datetime(2022, 6, 10, 21, 47, 34, 798696), None, None)
+    # example entry:
+    # (1, 1, datetime.datetime(2022, 6, 10, 21, 47, 34, 798696), None, None)
     if entry is None:
         return True
-    if entry[3] is None and entry[2] is not None: # Has start but no end time -> running
+    # Has start but no end time -> running
+    if entry[3] is None and entry[2] is not None:
         return False
     return True
