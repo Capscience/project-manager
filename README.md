@@ -75,3 +75,4 @@ At least these database tables will be used
 # Known issues:
 
 - Project timers and today's worktime are only updated when reloading page
+- Editing entry endtime can be set manually for running project. This pauses the project, but the project state is left to running.
