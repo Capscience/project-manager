@@ -100,6 +100,11 @@ def register():
     if not name or not password or not repeat_pw:
         return render_template('register.html')
 
+    invalid_name = False
+    invalid_pw = False
+    invalid_repeat_pw = False
+    username_taken = False
+
     name_regex = r'[\w_.-]{4,128}'
     if re.match(name_regex, name) is None:
         flash('Invalid username. Please refer to instructions for username.')
