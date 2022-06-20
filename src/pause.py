@@ -43,7 +43,12 @@ def validate_pause(pid: int) -> bool:
         return False
 
     # Check if project is running
-    query = 'SELECT * FROM entry WHERE project_id=:pid ORDER BY id DESC'
+    query = """SELECT *
+               FROM entry
+               WHERE project_id=:pid
+                   AND start IS NOT NULL
+                   AND "end" IS NULL
+               ORDER BY id DESC"""
     entry = db.session.execute(query, {'pid': pid}).fetchone()
     # example entry:
     # (1, 1, datetime.datetime(2022, 6, 10, 21, 47, 34, 798696), None, None)

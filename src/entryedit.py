@@ -74,6 +74,15 @@ def validate_and_save(entry: tuple) -> bool:
             return False
         edit_comment(comment, entry)
 
+    # Make sure NULL times are not given a time
+    # This could pause project without updating state
+    if start and entry[1] is None:
+        flash('You can not edit empty times!')
+        return False
+    if end and entry[2] is None:
+        flash('You can not edit empty times!')
+        return False
+
     update = update_entry(start, end, entry)
     if update:
         return True
