@@ -111,7 +111,7 @@ def validate_and_save(project: tuple) -> bool:
     company = request.values.get('company')
 
     if comment:
-        comment_regex = r'[\w _.#-]{4,256}'
+        comment_regex = r'^[\w _.:#-]{4,256}$'
         if re.match(comment_regex, comment) is None:
             flash('Invalid comment!')
             return False
@@ -130,7 +130,7 @@ def update_project(name: str, worktype: str, company: str, project: tuple):
     values = {}
     updates = []
     if name and name != project[1]:
-        name_regex = r'[\w _.,#-]{4,128}'
+        name_regex = r'^[\w _.,#-]{4,128}$'
         if re.match(name_regex, name) is None:
             flash('Invalid project name!')
             return False

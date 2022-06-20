@@ -52,7 +52,7 @@ def validate_project(name: str, company: int):
         False othervise."""
 
     # Validate project name
-    name_regex = r'[\w _.#-]{4,128}'
+    name_regex = r'^[\w _.#-]{4,128}$'
     if re.match(name_regex, name) is None:
         flash('Invalid project name!')
         return False

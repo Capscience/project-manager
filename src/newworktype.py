@@ -39,7 +39,7 @@ def create_worktype() -> bool:
     price = request.values.get('price', '0').strip()
 
     # Validate worktype name
-    name_regex = r'[\w _.-]{4,128}'
+    name_regex = r'^[\w _.-]{4,128}$'
     if re.match(name_regex, name) is None:
         flash('Invalid name!')
         return False
