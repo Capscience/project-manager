@@ -25,5 +25,6 @@
         <button class="btn btn-primary" type="submit" value="">Log In</button>
         <a href="/register" class="btn btn-outline-primary" type="link">Register</button></a>
     </div>
+    <input type="hidden" name="csrf_token" value="{{ g.csrf_token }}">
 </form>
 {% endblock %}

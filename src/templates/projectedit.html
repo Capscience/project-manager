@@ -79,57 +79,58 @@
                 <th scope="col">Total</th>
                 <th scope="col">Comment</th>
             </tr>
-        </thead>
-        <tbody>
-            {% if not entries %}
-            <tr>
-                <td colspan="4">
-                    Project does not have any entries yet.
-                </td>
-            </tr>
-            {% else %}
-            {% for entry in entries %}
-            
-            <tr>
-                <td>
-                    <a class="btn btn-outline-dark btn-sm mx-1" role="button" href="{{ url_for('edit_entry', eid = entry[4]) }}"><i class="bi bi-pencil"></i></a>
-                    {{ entry[0] }}
-                </td>
-                <td>{{ entry[1] }}</td>
-                <td>{{ entry[2]|timeformat }}</td>
-                {% if entry[3] %}
-                <td>{{ entry[3] }}</td>
+            </thead>
+            <tbody>
+                {% if not entries %}
+                <tr>
+                    <td colspan="4">
+                        Project does not have any entries yet.
+                    </td>
+                </tr>
                 {% else %}
-                <td></td>
+                {% for entry in entries %}
+                
+                <tr>
+                    <td>
+                        <a class="btn btn-outline-dark btn-sm mx-1" role="button" href="{{ url_for('edit_entry', eid = entry[4]) }}"><i class="bi bi-pencil"></i></a>
+                        {{ entry[0] }}
+                    </td>
+                    <td>{{ entry[1] }}</td>
+                    <td>{{ entry[2]|timeformat }}</td>
+                    {% if entry[3] %}
+                    <td>{{ entry[3] }}</td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                </tr>
+                
+                {% endfor %}
                 {% endif %}
-            </tr>
-            
-            {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
-</div>
-<div class="col-md mx-1 mb-3">
-    <button class="btn btn-primary" type="submit" name="action" value="save">Save</button>
-    <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
-    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3"></i></button>
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete project "{{ project[1] }}"?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Deleting project also deletes <b>all data</b> related to it <b>permanently</b>. Are you sure you want to delete project "{{ project[1] }}"?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-danger" type="submit" name="action" value="delete">Delete</button>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md mx-1 mb-3">
+        <button class="btn btn-primary" type="submit" name="action" value="save">Save</button>
+        <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
+        <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3"></i></button>
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete project "{{ project[1] }}"?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Deleting project also deletes <b>all data</b> related to it <b>permanently</b>. Are you sure you want to delete project "{{ project[1] }}"?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-danger" type="submit" name="action" value="delete">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <input type="hidden" name="csrf_token" value="{{ g.csrf_token }}">
 </form>
 {% endblock %}

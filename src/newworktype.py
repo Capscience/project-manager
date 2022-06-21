@@ -19,8 +19,6 @@ def new_worktype():
     if request.method == 'GET':
         return render_template('newworktype.html')
 
-    # Get inputs from form
-
     if create_worktype():
         flash('Worktype created successfully.')
         return redirect(url_for('manager'))
@@ -32,9 +30,9 @@ def create_worktype() -> bool:
 
     # Get data from form
     name = request.values.get('name', '').strip()
-    rounding = request.values.get('rounding', '').strip()
+    rounding = request.values.get('rounding', '0').strip()
     rounding_unit = int(request.values.get('rounding_unit'))
-    minimum = request.values.get('minimum', '').strip()
+    minimum = request.values.get('minimum', '0').strip()
     min_unit = int(request.values.get('min_unit'))
     price = request.values.get('price', '0').strip()
 

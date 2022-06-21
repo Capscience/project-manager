@@ -36,5 +36,6 @@
         <button class="btn btn-primary" type="submit">Create</button>
         <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
     </div>
+    <input type="hidden" name="csrf_token" value="{{ g.csrf_token }}">
 </form>
 {% endblock %}

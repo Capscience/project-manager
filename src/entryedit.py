@@ -22,6 +22,10 @@ def edit_entry(eid: int):
                      FROM entry WHERE id = :eid"""
     entry = db.session.execute(query_entry, {'eid': eid}).fetchone()
 
+    if entry is None:
+        flash('Entry not found.')
+        return redirect(url_for('manager'))
+
     # Project must be checked to make sure
     # entries can't be edited by other users.
     query_project = """SELECT id FROM project
@@ -34,24 +38,21 @@ def edit_entry(eid: int):
         }
     ).fetchone()
 
-    if entry is None or project is None:
+    if project is None:
         flash('Entry not found.')
         return redirect(url_for('manager'))
 
-    if request.values.get('action') == 'delete':
-        delete(eid)
-        return redirect(url_for('manager'))
-
     if request.method == 'POST':
+        if request.values.get('action') == 'delete':
+            delete(eid)
+            return redirect(url_for('edit_project', pid=entry[5]))
+
         if validate_and_save(entry):
             flash('Editing successful.')
             return redirect(url_for('manager'))
         return redirect(url_for('edit_entry', eid=eid))
 
-    return render_template(
-        'entryedit.html',
-        entry=entry
-    )
+    return render_template('entryedit.html', entry=entry)
 
 
 def validate_and_save(entry: tuple) -> bool:

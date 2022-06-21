@@ -75,7 +75,7 @@
                 <input type="text" class="form-control" id="price" name="price" placeholder="" minlength="1" aria-label="Price per hour">
                 <label for="price">Price (€/h)</label>
                 <div id="minimum" class="form-text">
-                    Worktype price. Use integers only. If no price is specified, 0 €/h will be used.
+                    Worktype price. Use integers only.
                 </div>
             </div>
         </div>
@@ -84,5 +84,6 @@
         <button class="btn btn-primary" type="submit">Create</button>
         <a class="btn btn-outline-danger" type="button" href="{{ url_for('manager') }}">Cancel</a>
     </div>
+    <input type="hidden" name="csrf_token" value="{{ g.csrf_token }}">
 </form>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 import re
 import functools
+import secrets
 from flask import g
 from flask import redirect
 from flask import render_template
@@ -9,6 +10,7 @@ from flask import session
 from flask import request
 from flask import url_for
 from flask import flash
+from flask import abort
 from passlib.hash import sha512_crypt
 from src import app, db
 
@@ -28,7 +30,13 @@ def require_login():
             """Check that user is logged in."""
 
             if g.user is None:
-                return redirect(url_for('login'))
+                abort(403)
+            if request.method == 'POST':
+                # Prevent crsf vulnerability by checking token
+                # at every login (login and register done separately,
+                # this decoraton handles all other forms).
+                if g.csrf_token != request.values.get('csrf_token'):
+                    abort(403)
             return func(*args, **kwargs)
         return decorated_function
     return decorator
@@ -51,6 +59,12 @@ def before_request():
     """Entry function to define g.user."""
 
     g.user = session.get('user')
+    # Change csrf_token every time page gets refreshed
+    # path != /? is needed, because firefox sometimes sends
+    # 2 GETs, which makes token change after it's set to forms
+    if request.method == 'GET' and request.full_path != '/?':
+        session['csrf_token'] = secrets.token_hex(16)
+    g.csrf_token = session.get('csrf_token')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -59,15 +73,17 @@ def login():
 
     if g.user:
         return redirect(url_for('home'))
+    
+    if request.method == 'GET':
+        return render_template('login.html')
+
+    if g.csrf_token != request.values.get('csrf_token'):
+        abort(403)
 
     # Create new login
     invalidate_login()
     name = request.values.get('username', '').strip()
     password = request.values.get('password', '').strip()
-
-    # If no posts, just render login.html
-    if not name or not password:
-        return render_template('login.html')
 
     query = 'SELECT id, name, password FROM account WHERE name=:name'
     result = db.session.execute(query, {'name': name}).fetchone()
@@ -78,6 +94,7 @@ def login():
     # If login succesful, set session user
     if validate_passwd(result[1], password, result[2]):
         session['user'] = (result[0], result[1])
+        # session['csrf_token'] = secrets.token_hex(16)
         return redirect(url_for('home'))
     # Flash error message if login unsuccessful
     flash('Invalid username or password.')
@@ -91,14 +108,17 @@ def register():
     if g.user:
         return redirect(url_for('home'))
 
+    if request.method == 'GET':
+        return render_template('register.html')
+
+    if g.csrf_token != request.values.get('csrf_token'):
+        abort(403)
+
     # Create new user
     invalidate_login()
     name = request.values.get('username', '').strip()
     password = request.values.get('password', '').strip()
     repeat_pw = request.values.get('repeat_pw', '').strip()
-
-    if not name or not password or not repeat_pw:
-        return render_template('register.html')
 
     invalid_name = False
     invalid_pw = False
