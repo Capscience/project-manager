@@ -75,4 +75,3 @@ At least these database tables will be used
 # Known issues:
 
 - Project timers and today's worktime are only updated when reloading page
-- CSRF vulnerability
