@@ -40,6 +40,43 @@ def manager():
                       ORDER BY
                           P.state DESC, P.id DESC"""
     projects = db.session.execute(query_active, {'uid': g.user[0]}).fetchall()
+    # Get projects stopped today
+    query_stopped_today = """SELECT
+                                P.id, P.name, C.name, P.state,
+                                (SELECT
+                                    SUM(EXTRACT(EPOCH FROM
+                                    COALESCE("end", NOW())-start))*interval '1 sec'
+                                FROM entry WHERE project_id = P.id
+                                ) as time,
+                                (SELECT
+                                    comment
+                                FROM
+                                    entry
+                                WHERE
+                                    project_id = P.id
+                                    AND comment IS NOT NULL
+                                    AND comment != 'Rounding entry.'
+                                LIMIT 1
+                                ) as comment
+                            FROM
+                                project P, company C
+                            WHERE
+                                P.company_id = C.id
+                                AND P.user_id=:uid
+                                AND P.state = 0
+                                AND (SELECT DATE(start)
+                                     FROM entry
+                                     WHERE project_id = P.id
+                                     ORDER BY start DESC LIMIT 1
+                                    ) = DATE(NOW())
+                            ORDER BY
+                                P.state DESC, P.id DESC"""
+    stopped_today = db.session.execute(
+        query_stopped_today,
+        {
+            'uid': g.user[0]
+        }
+    ).fetchall()
     # Get total work time for the day
     query_todays_time = """SELECT
                                SUM(EXTRACT(EPOCH FROM
@@ -58,7 +95,8 @@ def manager():
     return render_template(
         'manager.html',
         projects=projects,
-        todays_time=todays_time[0]
+        todays_time=todays_time[0],
+        stopped_today=stopped_today
     )
 
 
@@ -114,12 +152,9 @@ def timeformat(timedelta: datetime.timedelta) -> str:
     if timedelta is None:
         timedelta = datetime.timedelta(seconds=0)
     timedelta = int(timedelta.total_seconds())
-    if timedelta < 0:
-        timedelta *= -1
-        sign = '-'
-    else:
-        sign = ''
+    sign = '-' if timedelta < 0 else ''
+    timedelta = abs(timedelta)
     hours = timedelta // 3600
-    minutes = timedelta // 60 - (hours * 60)
-    seconds = timedelta - (minutes*60) - (hours*3600)
+    minutes = timedelta // 60 % 60
+    seconds = timedelta % 60
     return f'{sign}{hours:02}:{minutes:02}:{seconds:02}'

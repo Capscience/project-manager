@@ -36,9 +36,9 @@
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-md">
+        <div class="col-sm">
             <div class="form-floating">
-                <input type="text" class="form-control" id="rounding" name="rounding" placeholder="" minlength="1" aria-label="Rounding time" required>
+                <input type="number" class="form-control" id="rounding" name="rounding" placeholder="" min="0" max="1000" step="5" aria-label="Rounding time" required>
                 <label for="rounding">Rounding time</label>
                 <div id="rounding" class="form-text">
                     What amount of time is worktimes rounded to when finishing project? For example, 30 minutes means, that the times will be rounded to next half hour. Use integers only, 0 disables rounding.
@@ -53,9 +53,9 @@
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-md">
+        <div class="col-sm">
             <div class="form-floating">
-                <input type="text" class="form-control" id="minimum" name="minimum" placeholder="" minlength="1" aria-label="Minimum time" required>
+                <input type="number" class="form-control" id="minimum" name="minimum" placeholder="" min="0" max="1000" step="5" aria-label="Minimum time" required>
                 <label for="minimum">Minimum time</label>
                 <div id="minimum" class="form-text">
                     Minimum time for the worktype. If total time of project is smaller when rounding, total time will be rounded to this time. Use integers only, 0 is valid.
@@ -72,7 +72,7 @@
     <div class="row mb-3">
         <div class="col-md">
             <div class="form-floating">
-                <input type="text" class="form-control" id="price" name="price" placeholder="" minlength="1" aria-label="Price per hour">
+                <input type="number" class="form-control" id="price" name="price" placeholder="" min="0" max="10000" step="1" aria-label="Price per hour">
                 <label for="price">Price (€/h)</label>
                 <div id="minimum" class="form-text">
                     Worktype price. Use integers only.

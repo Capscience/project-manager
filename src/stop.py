@@ -4,7 +4,8 @@ import datetime
 from flask import redirect
 from flask import g
 from flask import url_for
-from src import app, db
+from src import app
+from src import db
 from src.login import require_login
 
 
@@ -81,15 +82,14 @@ def add_rounding_entry(pid: int) -> None:
     # Check for minimum time
     if tot_time < minimum:
         rounded = minimum
+    elif rounding == datetime.timedelta(0):
+        # If no rounding, just set state to stopped
+        update = 'UPDATE project SET state=0 WHERE id=:pid'
+        db.session.execute(update, {'pid': pid})
+        db.session.commit
+        return
     else:
-        # If tounding time is 0, don't round, only update state
-        try:
-            rounded = rounding * (tot_time // rounding + 1)
-        except ZeroDivisionError:
-            update = 'UPDATE project SET state=0 WHERE id=:pid'
-            db.session.execute(update, {'pid': pid})
-            db.session.commit()
-            return
+        rounded = rounding * (tot_time // rounding + 1)
 
     delta = rounded - tot_time
 
@@ -103,4 +103,3 @@ def add_rounding_entry(pid: int) -> None:
     update = 'UPDATE project SET state=0 WHERE id=:pid'
     db.session.execute(update, {'pid': pid})
     db.session.commit()
-    return
