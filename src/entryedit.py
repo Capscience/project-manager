@@ -26,6 +26,10 @@ def edit_entry(eid: int):
         flash('Entry not found.')
         return redirect(url_for('manager'))
 
+    if entry[4] == 'Rounding entry.':
+        flash('Entry not editable.')
+        return redirect(url_for('manager'))
+
     # Project must be checked to make sure
     # entries can't be edited by other users.
     query_project = """SELECT id FROM project
