@@ -73,8 +73,7 @@ def validate_and_save(entry: tuple) -> bool:
 
     # Check comment
     if comment:
-        comment_regex = r'^[\w _.:#-]{4,256}$'
-        if re.match(comment_regex, comment) is None:
+        if 4 > len(comment) > 256:
             flash('Invalid comment!')
             return False
         edit_comment(comment, entry)

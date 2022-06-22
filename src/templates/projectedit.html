@@ -26,19 +26,19 @@
 <form method="post" action="">
     <div class="col my-3 mx-1">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="name" name="project_name" placeholder="" minlength="4" aria-label="Rename project">
+            <input type="text" class="form-control" id="name" name="project_name" placeholder="" minlength="4" maxlength="256" aria-label="Rename project">
             <label for="name">Rename</label>
             <div id="name" class="form-text">
-                Leave empty to use same as before. Name must be 4-128 characters. Allowed characters are numbers, all lower and uppercase letters and special characters ._-# and space.
+                Leave empty to use same as before. Name must be 4-256 characters.
             </div>
         </div>
     </div>
     <div class="col my-3 mx-1">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="comment" name="comment" placeholder="" minlength="4" aria-label="Comment">
+            <input type="text" class="form-control" id="comment" name="comment" placeholder="" minlength="4" maxlength="256" aria-label="Comment">
             <label for="comment">Comment</label>
             <div id="comment" class="form-text">
-                Comment must be 4-256 characters. Allowed characters are numbers, all lower and uppercase letters and special characters _.:#- and space.
+                Comment must be 4-256 characters.
             </div>
         </div>
     </div>

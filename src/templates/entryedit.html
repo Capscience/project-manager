@@ -23,50 +23,32 @@
 
 {% block content %}
 <form method="post" action="">
-    <div class="table-responsive mt-3">
-        <table class="table table-hover" id="mainTable">
-            <thead class="table-dark">
-                <tr>
-                <th scope="col">Start time</th>
-                <th scope="col">End time</th>
-                <th scope="col">Total</th>
-                <th scope="col">Comment</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-            <tr>
-                <td>
-                    {{ entry[1] }}
-                </td>
-                <td>{{ entry[2] }}</td>
-                <td>{{ entry[3]|timeformat }}</td>
-                {% if entry[4] %}
-                <td>{{ entry[4] }}</td>
-                {% else %}
-                <td></td>
-                {% endif %}
-            </tr>
-            <tr>
-                <td>
-                    <div class="form">
-                        <input type="text" class="form-control" id="start" name="start" placeholder="yyyy-mm-dd hh:mm:ss" minlength="4" aria-label="Start time">
-                    </div>
-                </td>
-                <td>
-                    <div class="form">
-                        <input type="text" class="form-control" id="end" name="end" placeholder="yyyy-mm-dd hh:mm:ss" minlength="4" aria-label="End time">
-                    </div>
-                </td>
-                <td></td>
-                <td>
-                    <div class="form">
-                        <input type="text" class="form-control" id="comment" name="comment" placeholder="New comment" minlength="4" aria-label="New comment">
-                    </div> 
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row mb-3">
+        <div class="col-sm-auto me-1">
+            <label for="start" class="form-label">Start time</label>
+            <div class="form">
+                <input type="text" class="form-control" id="start" name="start" placeholder="" value="{{ entry[1] }}" minlength="4" aria-label="Start time">
+            </div>
+        </div>
+        <div class="col-sm-auto">
+            <label for="end" class="form-label">End time</label>
+            <div class="form">
+                <input type="text" class="form-control" id="end" name="end" placeholder="" value="{{ entry[2] }}" minlength="4" aria-label="End time">
+            </div>
+        </div>
+        <div class="col-md ms-1">
+            <label for="comment" class="form-label">Comment</label>
+            {% if entry[4] %}
+            <div class="form">
+                <input type="text" class="form-control" id="comment" name="comment" placeholder="" value="{{ entry[4] }}" minlength="4" aria-label="New comment">
+            </div>
+            {% else %}
+            <div class="form">
+                <input type="text" class="form-control" id="comment" name="comment" placeholder="New comment" value="" minlength="4" aria-label="New comment">
+            </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 <div class="col-md mx-1 mb-3">
     <button class="btn btn-primary" type="submit" name="action" value="save">Save</button>

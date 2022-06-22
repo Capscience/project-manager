@@ -37,9 +37,8 @@ def create_worktype() -> bool:
     price = request.values.get('price', '0').strip()
 
     # Validate worktype name
-    name_regex = r'^[\w _.-]{4,128}$'
-    if re.match(name_regex, name) is None:
-        flash('Invalid name!')
+    if 4 > len(name) > 128:
+        flash('Invalid name length!')
         return False
     query_worktype = 'SELECT * FROM work_type WHERE name = :name'
     worktype = db.session.execute(query_worktype, {'name': name}).fetchone()

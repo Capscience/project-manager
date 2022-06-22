@@ -28,8 +28,7 @@ def add_company(name: str):
     """Validate input and add valid company to db."""
 
     # Validate name
-    name_regex = r'^[\w _.-]{4,128}$'
-    if re.match(name_regex, name) is None:
+    if 4 > len(name) > 128:
         flash('Invalid company name!')
         return False
     # Check for same name company in db
