@@ -3,7 +3,8 @@
 import datetime
 from flask import render_template
 from flask import g
-from src import app, db
+from src import app
+from src import db
 from src.login import require_login
 
 
@@ -45,7 +46,7 @@ def manager():
                                 P.id, P.name, C.name, P.state,
                                 (SELECT
                                     SUM(EXTRACT(EPOCH FROM
-                                    COALESCE("end", NOW())-start))*interval '1 sec'
+                                    "end" - start))*interval '1 sec'
                                 FROM entry WHERE project_id = P.id
                                 ) as time,
                                 (SELECT
@@ -106,30 +107,30 @@ def finished():
     """Show finished projects."""
 
     query_finished = """SELECT
-                          P.id, P.name, C.name, P.state,
-                          (SELECT
-                               SUM(EXTRACT(EPOCH FROM
-                               COALESCE("end", NOW())-start))*interval '1 sec'
-                               FROM entry WHERE project_id = P.id
-                          ) as time,
-                          (SELECT
-                               comment
-                           FROM
-                               entry
-                           WHERE
-                               project_id = P.id
-                               AND comment IS NOT NULL
-                               AND comment != 'Rounding entry.'
-                           LIMIT 1
-                          ) as comment
-                      FROM
-                          project P, company C
-                      WHERE
-                          P.company_id = C.id
-                          AND P.user_id=:uid
-                          AND P.state = 0
-                      ORDER BY
-                          P.state DESC, P.id DESC"""
+                            P.id, P.name, C.name, P.state,
+                            (SELECT
+                                SUM(EXTRACT(EPOCH FROM
+                                "end" - start))*interval '1 sec'
+                                FROM entry WHERE project_id = P.id
+                            ) as time,
+                            (SELECT
+                                comment
+                            FROM
+                                entry
+                            WHERE
+                                project_id = P.id
+                                AND comment IS NOT NULL
+                                AND comment != 'Rounding entry.'
+                            LIMIT 1
+                            ) as comment
+                        FROM
+                            project P, company C
+                        WHERE
+                            P.company_id = C.id
+                            AND P.user_id=:uid
+                            AND P.state = 0
+                        ORDER BY
+                            P.state DESC, P.id DESC"""
     projects = db.session.execute(
         query_finished,
         {
