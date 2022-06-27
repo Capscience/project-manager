@@ -62,7 +62,8 @@ def before_request():
     # Change csrf_token every time page gets refreshed
     # path != /? is needed, because firefox sometimes sends
     # 2 GETs, which makes token change after it's set to forms
-    if request.method == 'GET' and request.full_path != '/?':
+    if ((request.method == 'GET' and request.full_path != '/?')
+        or (request.method == 'GET' and request.full_path != '/favicon.ico?')):
         session['csrf_token'] = secrets.token_hex(16)
     g.csrf_token = session.get('csrf_token')
 
