@@ -74,7 +74,7 @@ def login():
     """Log in to the app."""
 
     if g.user:
-        return redirect(url_for('home'))
+        return redirect(url_for('user', uid=g.user[0]))
 
     if request.method == 'GET':
         return render_template('login.html')
@@ -96,8 +96,7 @@ def login():
     # If login succesful, set session user
     if validate_passwd(result[1], password, result[2]):
         session['user'] = (result[0], result[1])
-        # session['csrf_token'] = secrets.token_hex(16)
-        return redirect(url_for('home'))
+        return redirect(url_for('manager'))
     # Flash error message if login unsuccessful
     flash('Invalid username or password.')
     return redirect(url_for('login'))
