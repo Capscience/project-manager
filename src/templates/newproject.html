@@ -24,7 +24,7 @@
         <select class="form-select mb-3" aria-label="Select worktype" name="worktype">
             {% for worktype in worktypes %}
             {% if worktype[0] == 0 %}
-            <option selected value="{{ worktype[0] }}">{{ worktype[1] }} {{ worktype[2] }} €/h</option>
+            <option selected value="{{ worktype[0] }}">{{ worktype[1] }} {{ worktype[2] }} €/h min: {{ worktype[5]|timeformat }} rounding: {{ worktype[4]|timeformat }}</option>
             {% else %}
             <option value="{{ worktype[0] }}">{{ worktype[1] }} {{ worktype[2] }} €/h</option>
             {% endif %}

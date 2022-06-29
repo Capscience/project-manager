@@ -21,7 +21,7 @@ def new_project():
         return redirect(next_page)
 
     # Get worktypes and companies for selections
-    query_worktypes = 'SELECT id, name, price FROM work_type'
+    query_worktypes = 'SELECT id, name, price, rounding, minimum FROM work_type'
     worktypes = db.session.execute(query_worktypes).fetchall()
     query_companies = 'SELECT id, name FROM company WHERE user_id = :uid'
     companies = db.session.execute(
