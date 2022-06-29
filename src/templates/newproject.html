@@ -12,6 +12,12 @@
 {% block content %}
 <form method="post" action="">
     <div class="col my-3 mx-1">
+        <select class="form-select mb-3" aria-label="Select client" name="company">
+            <option selected value="0">--select company--</option>
+            {% for company in companies %}
+            <option value="{{ company[0] }}">{{ company[1] }}</option>
+            {% endfor %}
+        </select>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="name" name="project_name" placeholder="Name" minlength="4" aria-label="Type project name" autofocus>
             <label for="name">Name</label>
@@ -28,12 +34,6 @@
             {% else %}
             <option value="{{ worktype[0] }}">{{ worktype[1] }} {{ worktype[2] }} €/h, minimum: {{ worktype[4]|timeformat }}, rounding: {{ worktype[3]|timeformat }}</option>
             {% endif %}
-            {% endfor %}
-        </select>
-        <select class="form-select mb-3" aria-label="Select client" name="company">
-            <option selected value="0">--select company--</option>
-            {% for company in companies %}
-            <option value="{{ company[0] }}">{{ company[1] }}</option>
             {% endfor %}
         </select>
     </div>
