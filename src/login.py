@@ -69,12 +69,12 @@ def before_request():
     g.csrf_token = session.get('csrf_token')
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     """Log in to the app."""
 
     if g.user:
-        return redirect(url_for('user', uid=g.user[0]))
+        return redirect(url_for('manager'))
 
     if request.method == 'GET':
         return render_template('login.html')
@@ -96,6 +96,7 @@ def login():
     # If login succesful, set session user
     if validate_passwd(result[1], password, result[2]):
         session['user'] = (result[0], result[1])
+        g.user = session.get('user')
         return redirect(url_for('manager'))
     # Flash error message if login unsuccessful
     flash('Invalid username or password.')
