@@ -17,6 +17,7 @@
                 <th scope="col">Project</th>
                 <th scope="col">Company</th>
                 <th scope="col">Time</th>
+                <th scope="col">Price</th>
                 <th scope="col" style="text-align:right">Controls</th>
             </tr>
         </thead>
@@ -40,6 +41,7 @@
                 </td>
                 <td>{{ project[2] }}</td>
                 <td>{{ project[4]|timeformat }}</td>
+                <td>{{ project[6] }} €</td>
                 <td style="text-align:right">
                     <a class="btn btn-outline-primary btn-sm" role="button" href="{{ url_for('reactivate', pid = project[0]) }}">Set active</a>
                 </td>
