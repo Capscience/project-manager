@@ -23,7 +23,10 @@ def new_project():
     # Get worktypes and companies for selections
     query_worktypes = 'SELECT id, name, price, rounding, minimum FROM work_type'
     worktypes = db.session.execute(query_worktypes).fetchall()
-    query_companies = 'SELECT id, name FROM company WHERE user_id = :uid'
+    query_companies = """SELECT id, name
+                         FROM company
+                         WHERE user_id = :uid
+                         ORDER BY name"""
     companies = db.session.execute(
         query_companies,
         {
