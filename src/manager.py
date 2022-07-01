@@ -19,7 +19,7 @@ def manager():
                         P.id, P.name, C.name, P.state,
                         (SELECT
                             SUM(EXTRACT(EPOCH FROM
-                            "end" - start))*interval '1 sec'
+                            COALESCE("end", NOW()) - start))*interval '1 sec'
                             FROM entry WHERE project_id = P.id
                         ) as time,
                         (SELECT
@@ -34,7 +34,7 @@ def manager():
                         ) as comment,
                         ROUND((SELECT
                             SUM(EXTRACT(EPOCH FROM
-                            "end" - start))
+                            COALESCE("end", NOW()) - start))
                         FROM entry WHERE project_id = P.id
                         )::INTEGER * WT.price/3600
                         ,2) as price
