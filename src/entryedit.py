@@ -26,10 +26,6 @@ def edit_entry(eid: int):
         flash('Entry not found.')
         return redirect(url_for('manager'))
 
-    if entry[4] == 'Rounding entry.':
-        flash('Entry not editable.')
-        return redirect(url_for('manager'))
-
     # Project must be checked to make sure
     # entries can't be edited by other users.
     query_project = """SELECT id FROM project
@@ -48,7 +44,7 @@ def edit_entry(eid: int):
 
     if request.method == 'POST':
         if request.values.get('action') == 'delete':
-            delete(eid)
+            delete(entry)
             return redirect(url_for('edit_project', pid=entry[5]))
 
         if validate_and_save(entry):
@@ -145,10 +141,20 @@ def edit_comment(comment: str, entry: tuple) -> None:
     return False
 
 
-def delete(eid: int) -> None:
+def delete(entry: tuple) -> None:
     """Delete entry with given id."""
 
+    message = 'Entry deleted.'
+    # Check if entry is rounding entry
+    if entry[4] == 'Rounding entry.':
+        # Reactivate project, else there can be finished projects
+        # without rounding entry
+        update = 'UPDATE project SET state=1 WHERE id=:pid'
+        db.session.execute(update, {'pid': entry[5]})
+        db.session.commit()
+        message = 'Rounding entry deleted, and project reactivated.'
+
     delete_sql = 'DELETE FROM entry WHERE id=:eid'
-    db.session.execute(delete_sql, {'eid': eid})
+    db.session.execute(delete_sql, {'eid': entry[0]})
     db.session.commit()
-    flash('Entry deleted.')
+    flash(message)

@@ -11,17 +11,29 @@
 
 {% block content %}
 <form method="post" action="">
+    {% if entry[4] == 'Rounding entry.' %}
+    <h5>Rounding entries can not be edited, but deleting is allowed.</h5>
+    <h6>Deleting rounding entry also automatically reactivates the project.</h6>
+    {% else %}
     <div class="row mb-3">
         <div class="col-sm-auto me-1">
             <label for="start" class="form-label">Start time</label>
             <div class="form">
+                {% if entry[1] %}
                 <input type="text" class="form-control" id="start" name="start" placeholder="" value="{{ entry[1] }}" minlength="4" aria-label="Start time">
+                {% else %}
+                <input type="text" class="form-control" id="start" name="start" placeholder="Empty, can't be edited" minlength="4" aria-label="Disabled" disabled>
+                {% endif %}
             </div>
         </div>
         <div class="col-sm-auto">
             <label for="end" class="form-label">End time</label>
             <div class="form">
+                {% if entry[2] %}
                 <input type="text" class="form-control" id="end" name="end" placeholder="" value="{{ entry[2] }}" minlength="4" aria-label="End time">
+                {% else %}
+                <input type="text" class="form-control" id="end" name="end" placeholder="Empty, can't be edited" minlength="4" aria-label="Disabled" disabled>
+                {% endif %}
             </div>
         </div>
         <div class="col-md ms-1">
@@ -37,9 +49,12 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
 </div>
 <div class="col-md mx-1 mb-3">
+    {% if entry[4] != 'Rounding entry.' %}
     <button class="btn btn-primary" type="submit" name="action" value="save">Save</button>
+    {% endif %}
     <a class="btn btn-outline-danger" type="button" href="{{ url_for('edit_project', pid = entry[5]) }}">Cancel</a>
     <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3"></i></button>
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
