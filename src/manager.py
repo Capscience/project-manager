@@ -32,12 +32,12 @@ def manager():
                             AND comment != 'Rounding entry.'
                         LIMIT 1
                         ) as comment,
-                        ROUND((SELECT
+                        COALESCE(ROUND((SELECT
                             SUM(EXTRACT(EPOCH FROM
                             COALESCE("end", NOW()) - start))
                         FROM entry WHERE project_id = P.id
                         )::INTEGER * WT.price/3600
-                        ,2) as price
+                        ,2),0) as price
                     FROM
                         project P, company C, work_type WT
                     WHERE
