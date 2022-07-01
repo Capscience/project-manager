@@ -26,6 +26,7 @@ def start(pid: int) -> str:
 def validate_start(pid: int) -> bool:
     """Check if project with pid can be started."""
 
+    # pylint: disable=duplicate-code
     # Validate pid
     query = 'SELECT state FROM project WHERE user_id=:uid AND id=:pid'
     project = db.session.execute(

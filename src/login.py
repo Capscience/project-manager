@@ -2,7 +2,6 @@
 
 import re
 import functools
-import secrets
 from flask import g
 from flask import redirect
 from flask import render_template

@@ -1,3 +1,5 @@
+"""Template filters for use in jinja templates."""
+
 import datetime
 from src import app
 

@@ -24,6 +24,7 @@ def stop(pid: int) -> str:
 def validate_stop(pid: int) -> bool:
     """Check if project can be stopped."""
 
+    # pylint: disable=duplicate-code
     # Validate pid
     query = 'SELECT state FROM project WHERE user_id=:uid AND id=:pid'
     project = db.session.execute(
@@ -86,7 +87,7 @@ def add_rounding_entry(pid: int) -> None:
         # If no rounding, just set state to stopped
         update = 'UPDATE project SET state=0 WHERE id=:pid'
         db.session.execute(update, {'pid': pid})
-        db.session.commit
+        db.session.commit()
         return
     else:
         rounded = rounding * (tot_time // rounding + 1)

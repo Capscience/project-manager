@@ -1,6 +1,5 @@
 """Handle editing projects."""
 
-import re
 import datetime
 from flask import render_template
 from flask import redirect

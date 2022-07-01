@@ -1,6 +1,5 @@
 """Module for creating a new worktype."""
 
-import re
 import datetime
 from flask import redirect
 from flask import render_template
@@ -51,10 +50,10 @@ def create_worktype() -> bool:
         minimum = int(minimum)
         rounding = int(rounding)
         price = float(price)
-        price = round(price, 2) # Round just in case
+        price = round(price, 2)  # Round just in case
     except ValueError:
-        flash('Only use integers for rounding and minimum, '\
-            'and decimal for price!')
+        flash('Only use integers for rounding and minimum, '
+              'and decimal for price!')
         return False
 
     # Set rounding and minimum to correct units

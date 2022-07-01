@@ -1,6 +1,5 @@
 """Handles creating a new project."""
 
-import re
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -21,7 +20,8 @@ def new_project():
         return redirect(next_page)
 
     # Get worktypes and companies for selections
-    query_worktypes = 'SELECT id, name, price, rounding, minimum FROM work_type'
+    query_worktypes = """SELECT id, name, price, rounding, minimum
+                         FROM work_type"""
     worktypes = db.session.execute(query_worktypes).fetchall()
     query_companies = """SELECT id, name
                          FROM company
