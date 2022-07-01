@@ -2,11 +2,31 @@
 {% set title = g.user[1] %}
 {% block content %}
 
-<div class="card" style="width: 18rem;">
+<div class="card mb-3" style="width: 18rem;">
     <div class="card-body">
-        <h5 class="card-title">User homepage</h5>
-        <p class="card-text">This page will have the main app functionality for each user. Currently only login and register system is implemented.</p>
+        <h5 class="card-title">User edit page</h5>
+        <p class="card-text">On this page, you can delete your account if you want. This will delete all data related to your account permanently.</p>
     </div>
 </div>
-
+<form method="post">
+    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3"></i>Delete account</button>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete account?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    This will delete <b>all data</b> related to user (companies, projects, entries, login data). You will no longer be able to use this account. Are you sure you want to delete this account?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit" name="action" value="delete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+</form>
 {% endblock %}
