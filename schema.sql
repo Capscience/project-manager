@@ -1,13 +1,13 @@
 CREATE TABLE account (
         id SERIAL NOT NULL, 
-        name VARCHAR(32), 
+        name VARCHAR(128), 
         password VARCHAR(128), 
         PRIMARY KEY (id)
 );
 
 CREATE TABLE work_type (
         id SERIAL NOT NULL, 
-        name VARCHAR(32), 
+        name VARCHAR(128), 
         rounding INTERVAL MINUTE, 
         minimum INTERVAL MINUTE, 
         price NUMERIC, 
@@ -19,7 +19,7 @@ CREATE TABLE work_type (
 
 CREATE TABLE company (
         id SERIAL NOT NULL, 
-        name VARCHAR(32), 
+        name VARCHAR(128), 
         user_id INTEGER, 
         PRIMARY KEY (id), 
         FOREIGN KEY(user_id) REFERENCES account (id) ON DELETE CASCADE
@@ -31,7 +31,7 @@ CREATE TABLE company (
 CREATE TABLE project (
         id SERIAL NOT NULL, 
         state INTEGER, 
-        name VARCHAR(128), 
+        name VARCHAR(256), 
         user_id INTEGER, 
         company_id INTEGER, 
         type_id INTEGER, 
@@ -46,7 +46,7 @@ CREATE TABLE entry (
         project_id INTEGER, 
         start TIMESTAMP(0) WITHOUT TIME ZONE, 
         "end" TIMESTAMP(0) WITHOUT TIME ZONE, 
-        comment VARCHAR(128), 
+        comment VARCHAR(256), 
         PRIMARY KEY (id), 
         FOREIGN KEY(project_id) REFERENCES project (id) ON DELETE CASCADE
 );
