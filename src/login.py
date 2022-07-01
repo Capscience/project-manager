@@ -31,12 +31,6 @@ def require_login():
 
             if g.user is None:
                 abort(403)
-            if request.method == 'POST':
-                # Prevent crsf vulnerability by checking token
-                # at every login (login and register done separately,
-                # this decoraton handles all other forms).
-                if g.csrf_token != request.values.get('csrf_token'):
-                    abort(403)
             return func(*args, **kwargs)
         return decorated_function
     return decorator
@@ -54,19 +48,12 @@ def validate_passwd(user, password, user_password) -> bool:
     return user and password and sha512_crypt.verify(password, user_password)
 
 
+@app.before_first_request
 @app.before_request
 def before_request():
     """Entry function to define g.user."""
 
     g.user = session.get('user')
-    # Change csrf_token every time page gets refreshed
-    # path != /? is needed, because firefox sometimes sends
-    # 2 GETs, which makes token change after it's set to forms
-    if (request.method == 'GET' and
-            request.full_path != '/?' and
-            request.full_path != '/favicon.ico?'):
-        session['csrf_token'] = secrets.token_hex(16)
-    g.csrf_token = session.get('csrf_token')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -78,9 +65,6 @@ def login():
 
     if request.method == 'GET':
         return render_template('login.html')
-
-    if g.csrf_token != request.values.get('csrf_token'):
-        abort(403)
 
     # Create new login
     invalidate_login()
@@ -96,7 +80,6 @@ def login():
     # If login succesful, set session user
     if validate_passwd(result[1], password, result[2]):
         session['user'] = (result[0], result[1])
-        g.user = session.get('user')
         return redirect(url_for('manager'))
     # Flash error message if login unsuccessful
     flash('Invalid username or password.')
@@ -112,9 +95,6 @@ def register():
 
     if request.method == 'GET':
         return render_template('register.html')
-
-    if g.csrf_token != request.values.get('csrf_token'):
-        abort(403)
 
     # Create new user
     invalidate_login()

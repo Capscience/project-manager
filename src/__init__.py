@@ -5,6 +5,7 @@ import glob
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
 
 
 app = Flask(__name__)
@@ -33,6 +34,8 @@ except FileNotFoundError as error:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+csrf = CSRFProtect(app)
 
 # Import files including pages after app is created
 for filename in sorted(glob.glob(os.path.dirname(__file__) + '/*.py')):
