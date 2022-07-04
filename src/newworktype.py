@@ -6,7 +6,8 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from flask import flash
-from src import app, db
+from src import app
+from src import db
 from src.login import require_login
 
 
@@ -49,8 +50,7 @@ def create_worktype() -> bool:
     try:
         minimum = int(minimum)
         rounding = int(rounding)
-        price = float(price)
-        price = round(price, 2)  # Round just in case
+        price = round(float(price), 2)  # Round just in case
     except ValueError:
         flash('Only use integers for rounding and minimum, '
               'and decimal for price!')

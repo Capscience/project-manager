@@ -6,7 +6,8 @@ from flask import request
 from flask import url_for
 from flask import flash
 from flask import g
-from src import app, db
+from src import app
+from src import db
 from src.login import require_login
 
 

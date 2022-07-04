@@ -3,7 +3,8 @@
 from flask import redirect
 from flask import g
 from flask import url_for
-from src import app, db
+from src import app
+from src import db
 from src.login import require_login
 
 
