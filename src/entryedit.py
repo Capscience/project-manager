@@ -104,6 +104,8 @@ def update_entry(start: str, end: str, entry: tuple):
             return False
         values['start'] = start
         updates.append('start = :start')
+    else:
+        values['start'] = entry[1]
 
     if end:
         try:
@@ -113,6 +115,12 @@ def update_entry(start: str, end: str, entry: tuple):
             return False
         values['end'] = end
         updates.append('"end" = :end')
+    else:
+        values['end'] = entry[2]
+
+    if values['start'] > values['end']:
+        flash('You can not make entry have negative time!')
+        return False
 
     if len(updates) > 0:
         values['eid'] = entry[0]
