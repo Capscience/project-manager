@@ -35,8 +35,4 @@ def validate_reactivation(pid: int) -> bool:
         }
     ).fetchone()
     # Make sure that project exists and is in 'stopped' state
-    if project is None:
-        return False
-    if project[0] == 0:
-        return True
-    return False
+    return project and project[0] == 0
