@@ -90,10 +90,20 @@
                 <tr>
                     <td>
                         <a class="btn btn-outline-dark btn-sm mx-1" role="button" href="{{ url_for('edit_entry', eid = entry[4]) }}"><i class="bi bi-pencil"></i></a>
+                        {% if entry[0] %}
                         {{ entry[0] }}
+                        {% endif %}
                     </td>
-                    <td>{{ entry[1] }}</td>
+                    <td>
+                        {% if entry[1] %}
+                        {{ entry[1] }}
+                        {% endif %}
+                    </td>
+                    {% if entry[2] %}
                     <td>{{ entry[2]|timeformat }}</td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
                     {% if entry[3] %}
                     <td>{{ entry[3] }}</td>
                     {% else %}
