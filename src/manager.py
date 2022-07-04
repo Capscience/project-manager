@@ -81,7 +81,7 @@ def manager():
                                 AND (SELECT DATE(start)
                                      FROM entry
                                      WHERE project_id = P.id
-                                     ORDER BY start DESC LIMIT 1
+                                     ORDER BY start ASC LIMIT 1
                                     ) = DATE(NOW())
                             ORDER BY
                                 P.state DESC, P.id DESC"""
