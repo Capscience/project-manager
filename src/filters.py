@@ -13,10 +13,10 @@ def timeformat(timedelta: datetime.timedelta) -> str:
 
     if timedelta is None:
         timedelta = datetime.timedelta(seconds=0)
-    timedelta = int(timedelta.total_seconds())
-    sign = '-' if timedelta < 0 else ''
-    timedelta = abs(timedelta)
-    hours = timedelta // 3600
-    minutes = timedelta // 60 % 60
-    seconds = timedelta % 60
+    total_seconds = int(timedelta.total_seconds())
+    sign = '-' if total_seconds < 0 else ''
+    total_seconds = abs(total_seconds)
+    hours = total_seconds // 3600
+    minutes = total_seconds // 60 % 60
+    seconds = total_seconds % 60
     return f'{sign}{hours:02}:{minutes:02}:{seconds:02}'
