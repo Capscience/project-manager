@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% set title = 'Edit company' %}
+{% block messages %}
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    <div class="col my-3 mx-1">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name" minlength="3" autofocus>
+            <label for="name">Rename</label>
+            <div id="name" class="form-text">
+                Name must be 3-128 characters.
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="col-md mx-1 mb-3">
+        <button class="btn btn-primary" type="submit" name="action" value="save">Save</button>
+        <a class="btn btn-outline-danger" type="button" href="{{ url_for('companylist') }}">Cancel</a>
+        <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3"></i></button>
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete company "{{ company[1] }}"?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Deleting company deletes all data and projects related to the company. Do you really want to delete {{ company[1] }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-danger" type="submit" name="action" value="delete">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
