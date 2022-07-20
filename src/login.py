@@ -9,9 +9,9 @@ from flask import session
 from flask import request
 from flask import url_for
 from flask import flash
-from flask import abort
 from passlib.hash import sha512_crypt
-from src import app, db
+from src import app
+from src import db
 
 
 def require_login():
