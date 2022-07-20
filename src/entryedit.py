@@ -162,6 +162,13 @@ def delete(entry: tuple) -> None:
         db.session.commit()
         message = 'Rounding entry deleted, and project reactivated.'
 
+    if entry[1] and not entry[2]:
+        # If entry to delete is running, set state to active
+        update = 'UPDATE project SET state=1 WHERE id=:pid'
+        db.session.execute(update, {'pid': entry[5]})
+        db.session.commit()
+        message = 'Running entry deleted, project paused.'
+
     delete_sql = 'DELETE FROM entry WHERE id=:eid'
     db.session.execute(delete_sql, {'eid': entry[0]})
     db.session.commit()
