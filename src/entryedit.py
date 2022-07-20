@@ -116,7 +116,7 @@ def update_entry(start: str, end: str, entry: tuple):
         values['end'] = end
         updates.append('"end" = :end')
     else:
-        values['end'] = entry[2]
+        values['end'] = entry[2] if entry[2] else datetime.now()
 
     if values['start'] > values['end']:
         flash('You can not make entry have negative time!')
