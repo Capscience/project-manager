@@ -29,7 +29,7 @@ def require_login():
             """Check that user is logged in."""
 
             if g.user is None:
-                abort(403)
+                return redirect(url_for('login'))
             return func(*args, **kwargs)
         return decorated_function
     return decorator
