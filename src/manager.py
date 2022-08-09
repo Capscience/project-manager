@@ -150,7 +150,7 @@ def finished():
                             AND P.state = 0
                             AND P.type_id = WT.id
                         ORDER BY
-                            P.state DESC, P.id DESC"""
+                            P.company_id DESC, P.type_id DESC, P.id DESC"""
     projects = db.session.execute(
         query_finished,
         {
