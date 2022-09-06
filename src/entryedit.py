@@ -28,7 +28,7 @@ def edit_entry(eid: int):
 
     # Project must be checked to make sure
     # entries can't be edited by other users.
-    query_project = """SELECT id FROM project
+    query_project = """SELECT id, state FROM project
                        WHERE id = :pid AND user_id = :uid"""
     project = db.session.execute(
         query_project,
@@ -49,7 +49,10 @@ def edit_entry(eid: int):
 
         if validate_and_save(entry):
             flash('Editing successful.')
-            return redirect(url_for('manager'))
+            if project[0] < 0:
+                return redirect(url_for('manager'))
+            else:
+                return redirect(url_for('finished'))
         return redirect(url_for('edit_entry', eid=eid))
 
     return render_template('entryedit.html', entry=entry)
