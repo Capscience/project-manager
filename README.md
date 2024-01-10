@@ -6,7 +6,7 @@ This app aims to make it easy to handle your work projects. It allows the user t
 
 The final version for the course is done.
 
-Latest version can be tested in [Heroku](https://tsoha-project-manager.herokuapp.com). Instructions can be found below as well as in help-page of the app.
+Latest version is self-hosted at [capscience.fi](https://capscience.fi). Instructions can be found below as well as in help-page of the app.
 
 [SQL schema](/schema.sql)
 
